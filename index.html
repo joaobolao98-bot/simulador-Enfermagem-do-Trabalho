@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulados Oficial - Enfermeiro do Trabalho & ACS</title>
+<title>Simulado Oficial - Enfermeiro do Trabalho (IBAM)</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style>
-.th-hd{background:var(--d)} .th-sub{color:var(--s)} .th-box{background:var(--m);border:1px solid var(--b)}
-.th-acc{color:var(--t)} .th-chip{background:var(--l);color:var(--t)} .th-bar{background:var(--m)}
-.th-btn{background:var(--m)} .th-btn:hover{background:var(--h)}
-.th-card{background:var(--l);border:1px solid var(--b)} .th-card:hover{filter:brightness(.96)}
-.th-soft{background:var(--l);border:1px solid var(--b)}
+.th-hd{background:#1e3a8a} .th-sub{color:#bfdbfe} .th-box{background:#2563eb;border:1px solid #1d4ed8}
+.th-acc{color:#1e40af} .th-chip{background:#eff6ff;color:#1e40af} .th-bar{background:#2563eb}
+.th-btn{background:#2563eb} .th-btn:hover{background:#1d4ed8}
+.th-card{background:#eff6ff;border:1px solid #bfdbfe} .th-card:hover{filter:brightness(.96)}
+.th-soft{background:#eff6ff;border:1px solid #bfdbfe}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 <header class="th-hd text-white shadow-md py-5 px-4">
   <div class="max-w-3xl mx-auto flex justify-between items-center gap-4">
     <div>
-      <h1 class="text-xl font-bold cursor-pointer" onclick="home()">Simulados de Concursos</h1>
-      <p id="sub" class="th-sub text-xs"></p>
+      <h1 class="text-xl font-bold cursor-pointer" onclick="home()">Simulado: Enfermeiro do Trabalho (IBAM)</h1>
+      <p class="th-sub text-xs">Focado estritamente no edital oficial solicitado</p>
     </div>
     <div id="timer-box" class="hidden th-box px-3 py-1.5 rounded-lg text-center">
       <span class="text-[10px] th-sub block">Tempo</span>
@@ -38,7 +38,7 @@
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <span id="cat" class="text-[10px] font-bold uppercase px-2.5 py-1 th-chip rounded-full"></span>
-        <button onclick="openMod(mi)" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded text-slate-700 font-medium cursor-pointer">Sair</button>
+        <button onclick="home()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded text-slate-700 font-medium cursor-pointer">Sair</button>
       </div>
     </div>
     <div class="h-2 bg-slate-200 rounded-full overflow-hidden"><div id="bar" class="h-full th-bar transition-all" style="width:0%"></div></div>
@@ -63,243 +63,214 @@
       <div class="th-soft p-4 rounded-lg"><span class="text-xs th-acc block">Aproveitamento</span><span id="r-pct" class="text-2xl font-bold th-acc"></span></div>
     </div>
     <div class="flex gap-3">
-      <button onclick="openMod(mi)" class="flex-1 bg-slate-200 hover:bg-slate-300 font-semibold py-3 rounded-lg text-sm cursor-pointer">Voltar aos simulados</button>
+      <button onclick="home()" class="flex-1 bg-slate-200 hover:bg-slate-300 font-semibold py-3 rounded-lg text-sm cursor-pointer">Voltar aos simulados</button>
       <button onclick="start(curSim)" class="flex-1 th-btn text-white font-semibold py-3 rounded-lg text-sm cursor-pointer">Refazer</button>
     </div>
     <div><h3 class="font-bold mb-3">Revisão das questões</h3><div id="review" class="space-y-3"></div></div>
   </section>
 </main>
 
-<footer class="text-center py-5 text-xs text-slate-500">Simulados de estudo para Concursos Públicos.</footer>
+<footer class="text-center py-5 text-xs text-slate-500">Simulado exclusivo para Concurso - Cargo: Enfermeiro do Trabalho (Banca IBAM).</footer>
 
 <script>
 const P="Língua Portuguesa", M="Matemática", I="Noções de Informática", E="Conhecimentos Específicos";
 
-const MODS = [
-{
-  tema:"rosa", cargo:"Esp Saúde Enfermeiro do Trabalho", banca:"IBAM", nome:"125 Questões Extensas (5 Simulados de 25 Questões)", size:25,
-  titles:[
-    "Simulado 1: Legislação do Trabalho, NR-1, NR-4, NR-5, Português, Mat e Inf",
-    "Simulado 2: NR-6, NR-7, PCMSO, Epidemiologia Ocupacional, Português e Mat",
-    "Simulado 3: NR-9, NR-17, Ergonômia, CAT, Lei 8.213/91 e Informática",
-    "Simulado 4: NR-32, Biossegurança, Resoluções COFEN e Processo de Enfermagem",
-    "Simulado 5: SUS, Leis 8.080/8142, RENAST, CEREST, Primeiros Socorros e Prontuário"
-  ],
-  bank:[
-    // SIMULADO 01 (25 Questões)
-    [P, "Texto I - A saúde ocupacional moderna transcende a mera ausência de doenças no ambiente laboral...\n\nNo Texto I, a manutenção do sentido original e a correção gramatical seriam preservadas ao substituir 'transcende' por:", "supera", ["aquiesce", "subverte", "corrobora"], "Transcender significa ir além de, superar."],
-    [P, "Assinale a alternativa em que a crase está empregada corretamente segundo a norma-padrão:", "A enfermeira prestou assistência à trabalhadora acidentada no setor de prensa.", ["A enfermeira prestou assistência à partir das 08h.", "A enfermeira referiu-se à ela com urbanidade.", "A equipe dirigiu-se à uma sala reservada."],"'À trabalhadora' possui preposição 'a' + artigo 'a'. Não há crase antes de verbo ('partir'), pronome pessoal ('ela') e artigo indefinido ('uma')."],
-    [P, "Na frase 'Embora os EPIs fossem fornecidos, alguns colaboradores negligenciavam seu uso', a oração sublinhada estabelece relação sintático-semântica de:", "concessão", ["causa", "consequência", "proporção"], "'Embora' é uma conjunção subordinativa concessiva."],
-    [P, "Identifique a opção em que a concordância verbal obedece à norma-culta:", "Havia muitos casos de DORT registrados no último trimestre.", ["Haviam muitos casos de DORT registrados no último trimestre.", "Fazem dois anos que a CIPA foi reformulada na fábrica.", "Tratam-se de diretrizes epidemiológicas essenciais."],"O verbo 'haver' no sentido de existir é impessoal (fica no singular). 'Fazer' indicando tempo decorrido também é impessoal."],
-    [M, "Em uma fábrica com 1.200 trabalhadores, 35% atuam no setor operacional submetido a ruído contínuo. Quantos operários estão nesse setor?", "420", ["380", "450", "350"], "35% de 1.200 = 0,35 x 1.200 = 420."],
-    [M, "Uma equipe de 4 enfermeiros realiza o exame ocupacional de 80 trabalhadores em 5 dias. Quantos dias 8 enfermeiros levariam para examinar os mesmos 80 trabalhadores?", "2,5 dias", ["3 dias", "4 dias", "1,5 dia"], "Com o dobro de enfermeiros (8 em vez de 4), o tempo necessário cai pela metade: 5 / 2 = 2,5 dias."],
-    [M, "Se o valor de um equipamento de proteção coletiva sofreu dois aumentos sucessivos de 10% e 20%, o aumento percentual acumulado foi de:", "32%", ["30%", "28%", "35%"], "1,10 x 1,20 = 1,32, o que corresponde a um aumento acumulado de 32%."],
-    [I, "No MS Word, qual atalho de teclado é utilizado para salvar diretamente um documento em edição?", "Ctrl + S", ["Ctrl + B", "Ctrl + P", "Ctrl + A"], "No MS Word em português, o comando para salvar é Ctrl + S."],
-    [I, "No MS Excel, qual das seguintes fórmulas calcula corretamente a média aritmética simples do intervalo das células A1 até A10?", "=MÉDIA(A1:A10)", ["=SOMA(A1:A10)/100", "=MEDIANA(A1;A10)", "=CONT.SE(A1:A10)"], "A função oficial para média aritmética no Excel é =MÉDIA(início:fim)."],
-    [E, "De acordo com a Lei Federal nº 7.498/1986 e o Decreto nº 94.406/1987, privativamente, cabe ao Enfermeiro do Trabalho:", "a consultoria, auditoria e emissão de parecer sobre serviços de enfermagem do trabalho.", ["a execução de curativos simples e aferição diária de sinais vitais.", "a organização das atas da CIPA sem supervisão.", "o preenchimento exclusivo do formulário de CAT."],"A Lei do Exercício Profissional estabelece a consultoria, auditoria e parecer técnico como atividades privativas do enfermeiro."],
-    [E, "Conforme a Resolução COFEN nº 564/2017 (Código de Ética), é DIREITO do profissional de enfermagem:", "recusar-se a executar atividades que não sejam de sua competência técnica, científica, ética e legal.", ["delegar atribuições privativas do enfermeiro ao técnico de enfermagem.", "divulgar imagens de pacientes acidentados se houver consentimento verbal.", "provocar aborto a pedido do empregador."],"O profissional tem o direito de se recusar a executar tarefas sem respaldo técnico ou legal."],
-    [E, "Segundo a Resolução COFEN nº 736/2024, o Processo de Enfermagem (PE) no contexto da Saúde do Trabalhador deve ser realizado de forma sistemática e estruturado em cinco etapas inter-relacionadas, quais sejam:", "Avaliação de Enfermagem, Diagnóstico de Enfermagem, Planejamento de Enfermagem, Implementação de Enfermagem e Evolução de Enfermagem.", ["Anamnese, Triagem, Medicação, Curativo e Alta.", "Exame Admissional, Periódico, Demissional, Mudança de Risco e Retorno ao Trabalho.", "Investigação, Prontuário, Exame Físico, Notificação e Relatório."],"A Resolução COFEN 736/2024 padroniza o PE nas 5 etapas descritas."],
-    [E, "A Norma Regulamentadora nº 1 (NR-1) estabelece que o Gerenciamento de Riscos Ocupacionais (GRO) deve constituir um:", "Programa de Gerenciamento de Riscos (PGR).", ["Programa de Controle Médico de Saúde Ocupacional (PCMSO).", "Perfil Profissiográfico Previdenciário (PPP).", "Relatório Anual de Acidentes."],"A NR-1 determina que o GRO deve ser materializado na empresa sob a forma de um PGR."],
-    [E, "Nos termos da NR-4 (SESMT), o dimensionamento dos serviços especializados em Engenharia de Segurança e em Medicina do Trabalho vincula-se diretamente a:", "grau de risco da atividade principal e número total de empregados do estabelecimento.",["lucro líquido anual e ramo de exportação.", "número de acidentes ocorridos no ano anterior exclusivamente.", "área construída do estabelecimento em metros quadrados."],"A tabela da NR-4 cruza o Grau de Risco (CNAE) com o quantitativo de empregados."],
-    [E, "Em conformidade com a NR-5 (CIPA), qual é o objetivo precípuo da Comissão Interna de Prevenção de Acidentes e Assédio?", "A prevenção de acidentes e doenças decorrentes do trabalho de modo a tornar compatível permanentemente o trabalho com a preservação da vida e a promoção da saúde.", ["A aplicação de punições disciplinares aos funcionários inadvertidos.", "A realização exclusiva de exames médicos periódicos.", "A aprovação do orçamento financeiro da empresa."],"A NR-5 explicita a prevenção de acidentes/doenças e a promoção da saúde de forma contínua."],
-    [E, "A respeito da Comunicação de Acidente de Trabalho (CAT), segundo a Lei Federal nº 8.213/1991, a empresa é obrigada a informar o acidente de trabalho à Previdência Social até:", "o primeiro dia útil seguinte ao da ocorrência e, de imediato, à autoridade competente em caso de morte.", ["24 horas em qualquer situação, mesmo se houver morte.", "48 horas após a confirmação diagnóstica pelo enfermeiro.", "o último dia do mês corrente."],"Art. 22 da Lei 8.213/91 estabelece o primeiro dia útil subsequente (ou imediato em caso de óbito)."],
-    [E, "No estudo da toxicologia ocupacional, a dose absorvida de um agente químico que causa danos à saúde do trabalhador depende fundamentalmente de:", "concentração do agente, tempo de exposição e via de absorção.", ["cor do produto químico e embalagem comercial.", "horário da jornada de trabalho e salário do operário.", "tipo de contrato do trabalhador."],"O risco químico é função direta da concentração, tempo de exposição e via biológica de entrada."],
-    [E, "Considere um trabalhador exposto a um nível de ruído contínuo de 90 dB(A). De acordo com a NR-15, a conduta prioritária a ser adotada pela empresa deve ser:", "adoção de medidas de proteção coletiva para eliminação/redução do ruído na fonte.", ["fornecimento imediato de protetor auricular e manutenção da fonte ruidosa.", "pagamento do adicional de insalubridade sem necessidade de intervenção ambiental.", "demissão preventiva do trabalhador."],"A legislação trabalhista estabelece a prioridade absoluta das Medidas de Proteção Coletiva (EPC) sobre as individuais."],
-    [E, "A Resolução COFEN nº 564/2017 prevê que, ao registrar as ações de enfermagem no prontuário do trabalhador, o enfermeiro deve assegurar:", "clareza, concisão, precisão, data, horário, identificação profissional e número de inscrição no COFEN.", ["apenas a assinatura legível, dispensando a data.", "o uso de códigos secretos compreendidos apenas pela equipe de enfermagem.", "o registro em folhas avulsas não numeradas."],"Os registros de enfermagem exigem identificação completa, data, hora e clareza para validade legal e assistencial."],
-    [E, "Com relação aos riscos psicossociais no trabalho, assinale a síndrome caracterizada pelo esgotamento profissional, despersonalização e baixa realização pessoal:", "Síndrome de Burnout", ["Síndrome de Raynaud", "Síndrome do Túnel do Carpo", "Síndrome de De Quervain"], "Burnout é definida pelo esgotamento físico e mental decorrente de estresse crônico no trabalho."],
-    [E, "A LER/DORT é classificada etiologicamente como um distúrbio multifatorial. Dentre os fatores biomecânicos associados a essa condição, destaca-se:", "repetitividade de movimentos combinada com aplicação de força excessiva.", ["exposição constante à radiação ionizante.", "contato direto com vírus e bactérias.", "trabalho noturno em iluminação reduzida."],"Movimentos repetitivos, força muscular excessiva e posturas inadequadas são fatores centrais nas LER/DORT."],
-    [E, "Na vacinação ocupacional de profissionais da saúde, segundo a NR-32, a imunização fornecida gratuitamente pelo empregador deve contemplar obrigatoriamente:", "Tétano, Difteria, Hepatite B e as vacinas estabelecidas na legislação vigente.", ["Apenas Febre Amarela e Dengue.", "Apenas Gripe H1N1 em períodos epidêmicos.", "Vacinas de uso estritamente infantil."],"A NR-32 especifica a vacinação gratuita contra tétano, difteria, hepatite B e demais constantes do PNI/legislação."],
-    [E, "O acolhimento de enfermagem em saúde do trabalhador caracteriza-se por:", "postura ético-humanística de escuta qualificada e responsabilização com a demanda do trabalhador.", ["triagem rápida focada em punir o absenteísmo.", "agendamento burocrático de exames demissional.", "encaminhamento imediato ao INSS sem escuta."],"O acolhimento é uma postura assistencial baseada na escuta atenta, ética e resolutiva."],
-    [E, "A Lei Federal nº 8.080/1990 define a Saúde do Trabalhador como um conjunto de atividades que se destina à:", "promoção, proteção, recuperação e reabilitação da saúde dos trabalhadores submetidos aos riscos dos processos de trabalho.", ["prestação de perícia médica exclusiva para fins de aposentadoria.", "fiscalização contábil das empresas privadas.", "substituição da Previdência Social pelo SUS."],"Art. 6º, §1º da Lei 8.080/90 estabelece que a saúde do trabalhador abrange a promoção, proteção, recuperação e reabilitação."],
-    [E, "O Centro de Referência em Saúde do Trabalhador (CEREST) atua como:", "polo disseminador de ações de apoio técnico, pedagógico e de vigilância em saúde do trabalhador no âmbito da RENAST.", ["hospital de alta complexidade para cirurgias ocupacionais.", "posto de emissão de carteira de trabalho.", "tribunal de julgamento de causas trabalhistas."],"O CEREST é uma unidade especializada que presta suporte técnico e pedagógico para a rede de atenção do SUS."]
-  ]
-},
-{
-  tema:"azul", cargo:"Agente Comunitário de Saúde (ESF)", banca:"GL Consultoria", nome:"Questões Extensas e Objetivas (60 Questões)", size:10,
-  titles:["SUS, Controle Social e PNAB", "Imunização e Atribuições", "Saneamento e Saúde Mental", "Epidemiologia e Doenças", "Doenças Infecciosas", "Saúde da Mulher e Criança"],
-  bank:[
-    [P,"Com base no papel do ACS, ele atua como:","contribui para que as informações circulem entre as famílias e a equipe de saúde.",["substitui os demais profissionais.","atua exclusivamente em hospital.","decide internações."],"O ACS é o elo direto entre a comunidade e a equipe de saúde."],
-    [P,"Assinale a frase correta quanto à crase:","A equipe de saúde recomendou às famílias que levassem as crianças à unidade para vacinação.",["A equipe recomendou as famílias a levarem à unidade.","A equipe recomendou à famílias.","A equipe de saúde recomendou às famílias a partir de segunda."],"'Às famílias' e 'à unidade' exigem o uso da crase (preposição + artigo)."],
-    [M,"Uma equipe acompanha 1.200 famílias. Visitou 15% na 1ª semana e 25% do restante na 2ª semana. Total visitado:","435",["300","480","375"],"15% de 1.200 = 180. Restam 1.020; 25% de 1.020 = 255. 180 + 255 = 435."],
-    [M,"Consumo de 3L de álcool em gel a cada 5 dias. Para 30 dias precisa-se de:","18 litros",["15 litros","20 litros","9 litros"],"30 dias = 6 períodos de 5 dias; 6 x 3 = 18 litros."],
-    [E,"Sobre o SUS, é correto afirmar:","A universalidade garante o acesso universal e a participação da comunidade ocorre via Conselhos.",["A equidade trata todos identicamente.","Apenas a I é verdadeira.","Todos são falsos."],"A equidade busca tratar diferentemente os desiguais para compensar vulnerabilidades."],
-    [E,"O Conselho Municipal de Saúde caracteriza-se por ser:","permanente e deliberativo, com 50% de usuários.",["temporário e consultivo.","exclusivo de gestores.","privado."],"Possui composição paritária e caráter deliberativo permanente."],
-    [E,"Na PNAB, a Atenção Primária tem função de:","coordenar o cuidado e ordenar a rede de atenção à saúde.",["atender urgência hospitalar apenas.","ofertar cuidado fragmentado.","substituir hospitais."],"A APS é a coordenadora do cuidado na rede."],
-    [E,"Sobre as atribuições do ACS:","Residir na comunidade e realizar visitas domiciliares de prevenção.",["Prescrever medicamentos.","Realizar exames de sangue.","Aplicar anestesias."],"Prescrever medicamentos não é função do ACS."],
-    [E,"O cadastramento das famílias e mapeamento do território serve para:","subsidiar o planejamento e as ações da equipe no território.",["procedimentos de autópsia.","emissão de CNH.","venda de remédios."],"O diagnóstico territorial direciona o planejamento em saúde."],
-    [E,"Ao identificar doença de notificação compulsória, o ACS deve:","comunicar imediatamente a equipe de saúde.",["aguardar o paciente piorar.","divulgar aos vizinhos.","ocultar o fato."],"A notificação célere permite ações preventivas da vigilância."]
-  ]
-}
+const BANK = [
+  // Português (IBAM Style)
+  {
+    cat: P,
+    q: "Texto de apoio:\n'A atuação do enfermeiro no ambiente laboral exige proficiência técnica, embasamento legal estrito e capacidade de articulação multiprofissional para mitigar riscos ocupacionais infortunísticos.'\n\nNo fragmento acima, mantendo o sentido original e a correção gramatical, a substituição adequada para a palavra 'mitigar' é:",
+    certa: "atenuar ou amenizar.",
+    erradas: ["potencializar ou ampliar.", "agravar ou intensificar.", "ocultar ou sonegar."],
+    exp: "Mitigar significa suavizar, atenuar, abrandar ou amenizar riscos e danos."
+  },
+  {
+    cat: P,
+    q: "Assinale a alternativa em que o emprego do sinal indicativo de crase obedece rigorosamente às normas gramaticais vigentes:",
+    certa: "A equipe técnica encaminhou o laudo à chefia responsável pelo setor de ergonomia.",
+    erradas: [
+      "A chefia passou à orientar os colaboradores quanto ao uso correto dos EPIs.",
+      "O médico coordenador referiu-se à todos os trabalhadores expostos a ruído.",
+      "O setor de engenharia iniciou a inspeção à partir das oito horas da manhã."
+    ],
+    exp: "'À chefia' exige crase (regência de encaminhar: quem encaminha, encaminha algo a alguém + artigo feminino 'a'). Não se usa crase antes de verbo ('orientar'), pronome indefinido ('todos') ou sem artigo no plural ('partir')."
+  },
+  {
+    cat: P,
+    q: "Assinale a alternativa em que a concordância verbal está inteiramente correta segundo a norma-padrão:",
+    certa: "Devem existir diretrizes claras de biossegurança em todas as unidades fabris.",
+    erradas: [
+      "Haviam muitos trabalhadores expostos a agentes químicos agressivos.",
+      "Faz dez anos que a empresa implantou o Programa de Gerenciamento de Riscos.",
+      "Tratam-se de medidas essenciais para a prevenção de acidentes laborais."
+    ],
+    exp: "O verbo 'existir' é pessoal e concorda com o sujeito ('diretrizes', no plural). 'Haver' no sentido de existir fica invariável no singular ('Havia'). 'Fazer' indicando tempo decorrido é impessoal ('Faz dez anos')."
+  },
+
+  // Matemática e Raciocínio Lógico
+  {
+    cat: M,
+    q: "Uma empresa possui 1.500 funcionários lotados em sua planta industrial. Verificou-se que 20% deles atuam no setor de alta periculosidade. O número de colaboradores que NÃO atuam nesse setor é de:",
+    certa: "1.200",
+    erradas: ["300", "1.000", "1.350"],
+    exp: "Se 20% atuam no setor, 80% não atuam. Logo, 80% de 1.500 = 0,80 x 1.500 = 1.200 colaboradores."
+  },
+  {
+    cat: M,
+    q: "Uma equipe composta por 3 enfermeiros do trabalho realiza a análise e triagem de 60 exames ocupacionais em um turno de 4 horas. Mantendo-se a mesma proporção e ritmo de trabalho, quanto tempo 6 enfermeiros levariam para processar a mesma quantidade de 60 exames?",
+    certa: "2 horas",
+    erradas: ["4 horas", "8 horas", "1 hora e meia"],
+    exp: "Grandezas inversamente proporcionais: dobrando o número de profissionais (de 3 para 6), o tempo necessário cai pela metade (4 horas / 2 = 2 horas)."
+  },
+  {
+    cat: M,
+    q: "Em um levantamento estatístico sobre os salários de uma equipe de apoio, os valores apurados foram: R$ 2.500, R$ 3.000, R$ 3.000, R$ 4.000 e R$ 7.500. A mediana e a moda desse conjunto de dados salariais são, respectivamente:",
+    certa: "R$ 3.000 e R$ 3.000",
+    erradas: ["R$ 4.000 e R$ 3.000", "R$ 3.000 e R$ 4.000", "R$ 4.000 e R$ 4.000"],
+    exp: "O rol ordenado é: 2500, 3000, 3000, 4000, 7500. O valor central (mediana) é 3000. O valor que mais se repete (moda) também é 3000."
+  },
+
+  // Noções de Informática
+  {
+    cat: I,
+    q: "No ambiente do sistema operacional Windows 11, qual atalho de teclado é comumente utilizado para abrir diretamente o 'Explorador de Arquivos'?",
+    certa: "Windows + E",
+    erradas: ["Windows + D", "Windows + R", "Windows + L"],
+    exp: "O atalho Windows + E abre o Explorador de Arquivos. Windows + D mostra a área de trabalho, Windows + R abre o Executar e Windows + L bloqueia a tela."
+  },
+  {
+    cat: I,
+    q: "No Microsoft Excel, uma fórmula sempre deve ser iniciada com determinado caractere especial para que o programa reconheça o cálculo. Assinale a alternativa que indica esse caractere correto:",
+    certa: "=",
+    erradas: ["#", "@", "$"],
+    exp: "Todas as funções e fórmulas no Excel começam obrigatoriamente com o sinal de igual (=)."
+  },
+  {
+    cat: I,
+    q: "No contexto da Segurança da Informação, o ataque cibernético conhecido como 'phishing' caracteriza-se por:",
+    certa: "uma tentativa fraudulenta de obter informações confidenciais (senhas, dados bancários) disfarçando-se de entidade confiável.",
+    erradas: [
+      "um software malicioso que se propaga automaticamente criptografando arquivos e exigindo resgate financeiro.",
+      "um dispositivo físico de hardware acoplado para interceptar teclas digitadas.",
+      "uma falha de arquitetura em servidores de rede locais."
+    ],
+    exp: "Phishing é a engenharia social voltada a enganar o usuário para que ele forneça dados sensíveis (e-mails falsos, links maliciosos)."
+  },
+
+  // Conhecimentos Específicos: Enfermeiro do Trabalho (IBAM)
+  {
+    cat: E,
+    q: "De acordo com a Lei Federal nº 7.498/1986 e o Decreto nº 94.406/1987, que regulamentam o exercício profissional da enfermagem, a coordenação do Serviço de Enfermagem do Trabalho em empresas é atividade:",
+    certa: "privativa do Enfermeiro.",
+    erradas: [
+      "compartilhada obrigatoriamente com técnicos de segurança.",
+      "atribuída a qualquer nível de formação em enfermagem.",
+      "exclusiva de médicos do trabalho."
+    ],
+    exp: "A legislação profissional estabelece que a direção e coordenação de serviços de enfermagem são privativas do enfermeiro."
+  },
+  {
+    cat: E,
+    q: "Conforme a Resolução COFEN nº 736/2024, que normatiza o Processo de Enfermagem (PE) em todo o território nacional, as cinco etapas inter-relacionadas, interdependentes e cíclicas são:",
+    certa: "Coleta de dados (ou Histórico de Enfermagem), Diagnóstico de Enfermagem, Planejamento de Enfermagem, Implementação e Avaliação de Enfermagem.",
+    erradas: [
+      "Triagem, Anamnese, Prescrição, Execução e Alta.",
+      "Avaliação de Riscos, Notificação de CAT, Perícia, Laudo e Arquivamento.",
+      "Investigação Ambiental, Diagnóstico de Risco, Vacinação, Curativo e Evolução."
+    ],
+    exp: "A Resolução COFEN 736/2024 padroniza exatamente as 5 etapas supracitadas para a prática clínica e ocupacional do enfermeiro."
+  },
+  {
+    cat: E,
+    q: "A Norma Regulamentadora nº 4 (NR-4) dispõe sobre os Serviços Especializados em Engenharia de Segurança e em Medicina do Trabalho (SESMT). O dimensionamento do SESMT em uma empresa é calculado com base em dois parâmetros fundamentais:",
+    certa: "o grau de risco da atividade principal da empresa e o número total de empregados do estabelecimento.",
+    erradas: [
+      "o faturamento bruto anual e a quantidade de filiais no exterior.",
+      "o número de acidentes de trabalho com afastamento no ano anterior exclusivamente.",
+      "a área física total construída em metros quadrados e o capital social."
+    ],
+    exp: "O dimensionamento da NR-4 cruza obrigatoriamente o dimensionamento por faixa de empregados e o Quadro I (Grau de Risco do CNAE)."
+  },
+  {
+    cat: E,
+    q: "No âmbito da NR-1, o Gerenciamento de Riscos Ocupacionais (GRO) deve constituir a base para a implementação do:",
+    certa: "Programa de Gerenciamento de Riscos (PGR).",
+    erradas: [
+      "Programa de Controle Médico de Saúde Ocupacional (PCMSO).",
+      "Laudo de Insalubridade e Periculosidade (LIP).",
+      "Perfil Profissiográfico Previdenciário (PPP)."
+    ],
+    exp: "A NR-1 estabelece que as organizações devem implementar, por estabelecimento, o GRO, o qual é materializado no documento denominado PGR."
+  },
+  {
+    cat: E,
+    q: "Em conformidade com a NR-7, que regulamenta o PCMSO, este programa deve contemplar a realização de exames médicos ocupacionais obrigatórios. Dentre eles, o exame que deve ser realizado obrigatoriamente antes que o trabalhador assuma suas atividades é o:",
+    certa: "exame admissional.",
+    erradas: [
+      "exame periódico.",
+      "exame de retorno ao trabalho.",
+      "exame demissional."
+    ],
+    exp: "O exame admissional é realizado antes do trabalhador iniciar as funções para as quais foi contratado."
+  },
+  {
+    cat: E,
+    q: "A Comunicação de Acidente de Trabalho (CAT), regulamentada pela Lei Federal nº 8.213/1991 (arts. 19 a 23), deve ser emitida pela empresa até o seguinte prazo legal em situações normais:",
+    certa: "o primeiro dia útil seguinte ao da ocorrência.",
+    erradas: [
+      "até 48 horas corridas.",
+      "em até 30 dias após o atendimento médico.",
+      "imediatamente no mesmo turno de trabalho."
+    ],
+    exp: "O art. 22 da Lei 8.213/91 determina que a empresa deverá formalizar a CAT até o primeiro dia útil seguinte ao da ocorrência (ou de imediato em caso de óbito)."
+  },
+  {
+    cat: E,
+    q: "De acordo com a Lei Federal nº 8.080/1990, compreende-se por 'Saúde do Trabalhador' um conjunto de atividades que se destina à:",
+    certa: "promoção, proteção, recuperação e reabilitação da saúde dos trabalhadores submetidos aos riscos e agravos originados dos processos de trabalho.",
+    erradas: [
+      "concessão exclusiva de benefícios previdenciários de auxílio-doença e aposentadoria por invalidez.",
+      "fiscalização fiscal e tributária de indústrias de grande porte.",
+      "emissão de laudos de insalubridade para fins de isenção fiscal patronal."
+    ],
+    exp: "O art. 6º, §3º da Lei 8.080/90 define expressamente o campo de atuação da Saúde do Trabalhador no âmbito do SUS."
+  },
+  {
+    cat: E,
+    q: "A Norma Regulamentadora nº 32 (NR-32) estabelece diretrizes básicas para a segurança e saúde no trabalho em estabelecimentos de saúde. Com relação à vacinação dos profissionais de saúde, a norma determina que o empregador deve:",
+    certa: "fornecer gratuitamente vacinação contra tétano, difteria, hepatite B e outras indicadas pelo PNI a todos os trabalhadores.",
+    erradas: [
+      "exigir que o trabalhador arque com os custos dos imunizantes na rede privada.",
+      "oferecer vacinas apenas para médicos e enfermeiros, excluindo o setor administrativo.",
+      "tornar a vacinação estritamente facultativa e opcional, sem registro no prontuário."
+    ],
+    exp: "A NR-32 obriga o empregador a disponibilizar gratuitamente vacinação a todos os trabalhadores envolvidos, conforme diretrizes do Ministério da Saúde."
+  },
+  {
+    cat: E,
+    q: "No estudo dos riscos ambientais ocupacionais (classificados nas normas regulamentadoras), a poeira, os fumos metálicos, as névoas e os gases são exemplos típicos de agentes de natureza:",
+    certa: "química.",
+    erradas: ["física.", "biológica.", "ergonômica."],
+    exp: "Fumos, poeiras, névoas, neblinas, gases e vapores compõem a classificação dos agentes químicos."
+  },
+  {
+    cat: E,
+    q: "O acolhimento de enfermagem ao trabalhador na consulta de saúde ocupacional caracteriza-se como:",
+    certa: "uma escuta qualificada pautada no vínculo, na ética e na identificação precoce de agravos relacionados ao trabalho.",
+    erradas: [
+      "um procedimento puramente burocrático de carimbo e assinatura de atestados.",
+      "uma triagem rápida com foco exclusivo na redução de faltas ao trabalho.",
+      "uma atividade privativa de médicos legistas."
+    ],
+    exp: "O acolhimento humanizado na enfermagem do trabalho visa estabelecer confiança, escutar o trabalhador e correlacionar sintomas com o processo laboral."
+  }
 ];
 
-const DURATION = 50 * 60;
-let mi = 0, curSim = 1, Q = [], cur = 0, answers = [], timer = null, timeLeft = DURATION;
+// Organiza em simulados de 5 questões cada para testar perfeitamente
+const SIZE = 5;
+let curSim = 1, Q = [], cur = 0, answers = [], timer = null, timeLeft = 50 * 60;
 const $ = id => document.getElementById(id);
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
-const PAL = {
-  cinza:   { d:"#1e293b", m:"#475569", h:"#334155", l:"#f8fafc", b:"#e2e8f0", t:"#1e293b", s:"#cbd5e1" },
-  azul:    { d:"#1e3a8a", m:"#2563eb", h:"#1d4ed8", l:"#eff6ff", b:"#bfdbfe", t:"#1e40af", s:"#bfdbfe" },
-  rosa:    { d:"#be185d", m:"#db2777", h:"#be185d", l:"#fdf2f8", b:"#fbcfe8", t:"#9d174d", s:"#fce7f3" }
-};
-
-const vars = k => { const c = PAL[k] || PAL.cinza; return Object.keys(c).map(x => `--${x}:${c[x]}`).join(";"); };
-const setTheme = k => document.documentElement.setAttribute("style", vars(k));
-const nSims = m => Math.floor(m.bank.length / m.size) || 1;
-
 function show(id) {
-  ["menu", "quiz", "result"].forEach(x => $(x).classList.add("hidden"));
-  $(id).classList.remove("hidden");
-  $("timer-box").classList.toggle("hidden", id !== "quiz");
-}
-
-function home() {
-  clearInterval(timer); setTheme("cinza");
-  $("sub").textContent = "Selecione o Cargo Pretendido";
-  let h = '<h2 class="text-lg font-bold text-center mb-4">Escolha o Cargo para Estudar</h2><div class="space-y-4">';
-  MODS.forEach((m, i) => {
-    h += `<div class="border border-slate-200 rounded-xl p-4" style="${vars(m.tema)};border-left:6px solid var(--m)">
-      <p class="text-[10px] font-bold uppercase tracking-wide th-acc">Banca ${m.banca}</p>
-      <h3 class="font-bold text-slate-900 mb-1">${m.cargo}</h3>
-      <p class="text-xs text-slate-600 mb-3">${m.nome}</p>
-      <button onclick="openMod(${i})" class="w-full py-2.5 th-btn text-white font-semibold rounded-lg text-sm cursor-pointer">Ver Simulados (${m.bank.length} Questões)</button>
-    </div>`;
-  });
-  $("menu-body").innerHTML = h + "</div>";
-  show("menu");
-}
-
-function openMod(i) {
-  clearInterval(timer);
-  mi = i; const m = MODS[i]; setTheme(m.tema);
-  $("sub").textContent = `Cargo: ${m.cargo} | Banca ${m.banca}`;
-  let h = `<button onclick="home()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded text-slate-700 font-medium cursor-pointer mb-3">← Alterar Cargo</button>
-    <p class="text-xs font-bold text-center th-acc uppercase tracking-wide mb-1">Cargo: ${m.cargo}</p>
-    <h2 class="text-lg font-bold text-center mb-1">Escolha um Simulado</h2>
-    <p class="text-slate-600 text-sm text-center mb-5">Feedback imediato com gabarito verde (acerto) ou vermelho (erro) e explicação ao clicar em cada alternativa.</p>
-    <div class="grid grid-cols-1 gap-3">`;
-  for (let s = 1; s <= nSims(m); s++) {
-    h += `<button onclick="start(${s})" class="p-4 th-card rounded-lg text-left cursor-pointer"><span class="font-bold th-acc block">Simulado ${String(s).padStart(2, "0")}</span><span class="text-xs text-slate-600">${m.titles[s - 1] || "Questões de Concurso"}</span></button>`;
-  }
-  h += "</div>";
-  $("menu-body").innerHTML = h;
-  show("menu");
-}
-
-function start(sim) {
-  curSim = sim; const m = MODS[mi];
-  const raw = m.bank.slice((sim - 1) * m.size, sim * m.size);
-  Q = raw.map(r => ({
-    cat: r[0], q: r[1], exp: r[4],
-    opts: shuffle([{ t: r[2], ok: true }, ...r[3].map(t => ({ t, ok: false }))])
-  }));
-  answers = Array(Q.length).fill(null); cur = 0; timeLeft = DURATION;
-  $("sim-title").textContent = `${m.cargo} - Simulado ${String(sim).padStart(2, "0")}`;
-  show("quiz");
-  clearInterval(timer); timer = setInterval(tick, 1000); tick(true);
-  render();
-}
-
-function tick(first) {
-  if (!first) timeLeft--;
-  if (timeLeft <= 0) { finish(); return; }
-  $("timer").textContent = `${String(Math.floor(timeLeft / 60)).padStart(2, "0")}:${String(timeLeft % 60).padStart(2, "0")}`;
-}
-
-function render() {
-  const q = Q[cur], ans = answers[cur];
-  $("tracker").textContent = `Questão ${cur + 1} de ${Q.length}`;
-  $("cat").textContent = q.cat;
-  $("qtext").textContent = q.q;
-  $("bar").style.width = `${((cur + (ans !== null ? 1 : 0)) / Q.length) * 100}%`;
-  const box = $("opts"); box.innerHTML = "";
-  
-  q.opts.forEach((o, i) => {
-    const b = document.createElement("button");
-    let cls = "w-full text-left p-4 rounded-lg border text-sm flex items-start gap-3 transition ";
-    
-    if (ans === null) {
-      cls += "border-slate-200 bg-white hover:bg-slate-50 cursor-pointer";
-    } else if (o.ok) {
-      cls += "border-emerald-600 bg-emerald-100 text-emerald-900 font-semibold ring-2 ring-emerald-500";
-    } else if (i === ans) {
-      cls += "border-rose-600 bg-rose-100 text-rose-900 font-semibold ring-2 ring-rose-500";
-    } else {
-      cls += "border-slate-200 bg-white opacity-50";
-    }
-    
-    b.className = cls;
-    const mark = ans === null ? "" : o.ok ? " ✔ (Correta)" : i === ans ? " ✘ (Sua escolha incorreta)" : "";
-    const lt = document.createElement("span"); lt.className = "font-bold"; lt.textContent = String.fromCharCode(65 + i) + ")";
-    const tx = document.createElement("span"); tx.className = "flex-grow"; tx.textContent = o.t + mark;
-    b.append(lt, tx);
-    
-    if (ans === null) {
-      b.onclick = () => { answers[cur] = i; render(); }; 
-    } else {
-      b.disabled = true;
-    }
-    box.appendChild(b);
-  });
-
-  const ex = $("exp");
-  if (ans === null) {
-    ex.classList.add("hidden");
-  } else {
-    const right = q.opts[ans].ok;
-    ex.className = "mt-5 p-4 rounded-lg border text-sm leading-relaxed " + (right ? "bg-emerald-50 border-emerald-300 text-emerald-950" : "bg-rose-50 border-rose-300 text-rose-950");
-    ex.innerHTML = `<strong class="block mb-1 text-base">${right ? "✔ Você Acertou!" : "✘ Você Errou!"}</strong>` +
-                   `<strong>Justificativa / Comentário:</strong> ${q.exp}`;
-    ex.classList.remove("hidden");
-  }
-  
-  $("prev").disabled = cur === 0;
-  const last = cur === Q.length - 1, nb = $("next");
-  nb.textContent = last ? "Finalizar" : "Próxima";
-  nb.className = (last ? "bg-emerald-600 hover:bg-emerald-700" : "th-btn") + " text-white font-medium py-2.5 px-6 rounded-lg text-sm cursor-pointer";
-}
-
-function go(d) {
-  if (d > 0 && cur === Q.length - 1) { finish(); return; }
-  cur = Math.max(0, Math.min(Q.length - 1, cur + d)); render();
-}
-
-function finish() {
-  clearInterval(timer); show("result");
-  const hits = Q.filter((q, i) => answers[i] !== null && q.opts[answers[i]].ok).length;
-  const pct = Math.round((hits / Q.length) * 100);
-  $("r-score").textContent = `${hits} / ${Q.length}`; 
-  $("r-pct").textContent = pct + "%";
-  $("msg").textContent = pct >= 70 ? "Excelente aproveitamento! Você está muito bem preparado." : "Bom treino! Revise os comentários das questões que errou abaixo.";
-  
-  const rv = $("review"); rv.innerHTML = "";
-  Q.forEach((q, i) => {
-    const a = answers[i], ok = a !== null && q.opts[a].ok;
-    const d = document.createElement("div");
-    d.className = "p-4 rounded-lg border text-sm space-y-1 " + (ok ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200");
-    
-    const title = document.createElement("div");
-    title.className = "font-bold text-slate-900";
-    title.textContent = `${i + 1}. [${q.cat}] ${q.q}`;
-    
-    const resp = document.createElement("div");
-    resp.className = ok ? "text-emerald-800 font-semibold" : "text-rose-800 font-semibold";
-    resp.textContent = "Sua resposta: " + (a === null ? "Não respondida" : q.opts[a].t);
-    
-    const certa = document.createElement("div");
-    certa.className = "text-slate-800 font-medium";
-    certa.textContent = "Resposta correta: " + q.opts.find(o => o.ok).t;
-    
-    const expl = document.createElement("div");
-    expl.className = "text-slate-600 text-xs mt-2 italic border-t border-slate-200 pt-2";
-    expl.textContent = "Explicação: " + q.exp;
-    
-    d.append(title, resp, certa, expl);
-    rv.appendChild(d);
-  });
-}
-
-home();
-</script>
-</body>
-</html>
+  ["menu", "quiz", "result"].forEach(x => $(x).classList.add
