@@ -1,1 +1,358 @@
-
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f5ef">
+  <title>Plantão de Estudos | Simulados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f2f5ef;
+      --surface: #fff;
+      --ink: #172921;
+      --muted: #69776e;
+      --line: #dce4dc;
+      --green: #176b50;
+      --green-dark: #104e3c;
+      --mint: #d9eee4;
+      --orange: #e68a4a;
+      --orange-soft: #fff0e2;
+      --red: #b9443e;
+      --shadow: 0 16px 38px rgba(30, 61, 44, .08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 'DM Sans', sans-serif; min-height: 100vh; }
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+    .topbar { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px max(24px, calc((100vw - 1180px) / 2)); background: var(--green-dark); color: white; }
+    .brand { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid #6b9c84; border-radius: 13px; color: #d8efdf; font-size: 22px; }
+    .brand-title { display: block; font: 800 15px Manrope, sans-serif; letter-spacing: 0; }
+    .brand-subtitle { display: block; color: #bed2c5; font-size: 12px; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-button, .quiet-button { min-height: 40px; border: 1px solid #45735e; border-radius: 9px; background: transparent; color: white; padding: 8px 12px; }
+    .icon-button { width: 42px; font-size: 18px; }
+    .quiet-button { font-size: 12px; }
+    .timer { display: flex; align-items: center; gap: 10px; padding: 7px 9px 7px 13px; border: 1px solid #45735e; border-radius: 9px; font: 700 14px ui-monospace, monospace; }
+    .timer button { border: 0; border-radius: 6px; background: #28684f; color: white; padding: 6px 9px; }
+    main { max-width: 1180px; width: calc(100% - 40px); margin: 34px auto 64px; }
+    .view[hidden], [hidden] { display: none !important; }
+    .hero { position: relative; overflow: hidden; min-height: 250px; padding: 34px 38px; border-radius: 12px; color: white; background: #173e32; isolation: isolate; }
+    .hero:after { content: ''; position: absolute; z-index: -1; width: 380px; height: 380px; right: -80px; top: -150px; border: 1px solid #5d8b73; border-radius: 50%; box-shadow: 0 0 0 34px #244d3d, 0 0 0 68px #1c4638; opacity: .7; }
+    .eyebrow { margin: 0 0 12px; color: #bce2c9; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: Manrope, sans-serif; letter-spacing: 0; }
+    .hero h1 { max-width: 620px; margin-bottom: 10px; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; }
+    .hero-copy { max-width: 590px; margin-bottom: 0; color: #d3e3d8; font-size: 14px; }
+    .course-tabs { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
+    .tab { min-height: 40px; border: 1px solid #648371; border-radius: 7px; background: transparent; color: #e3eee7; padding: 8px 13px; font-size: 12px; font-weight: 700; }
+    .tab[aria-selected="true"] { border-color: #f3b47b; background: var(--orange); color: #2e241c; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 14px; }
+    .section-heading h2 { margin: 0; font-size: 19px; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+    .module-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .module-card { min-height: 210px; display: flex; flex-direction: column; padding: 19px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); box-shadow: 0 4px 16px rgba(30, 61, 44, .035); }
+    .module-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .module-number { color: var(--green); font: 800 13px Manrope, sans-serif; }
+    .status { border-radius: 4px; background: #edf1ed; color: #5e6e63; padding: 4px 7px; font-size: 10px; font-weight: 700; }
+    .status.progress { background: var(--orange-soft); color: #8a572e; }
+    .status.done { background: var(--mint); color: #1d6248; }
+    .module-card h3 { margin: 17px 0 5px; font-size: 16px; }
+    .module-card p { margin: 0 0 15px; color: var(--muted); font-size: 12px; }
+    .progress-track { height: 4px; margin-top: auto; overflow: hidden; border-radius: 4px; background: #e9eee9; }
+    .progress-fill { height: 100%; background: var(--green); }
+    .primary, .secondary, .danger { min-height: 41px; border: 0; border-radius: 7px; padding: 9px 14px; font-size: 12px; font-weight: 700; transition: background .16s ease, transform .16s ease; }
+    .primary { background: var(--green); color: white; }
+    .primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .secondary { border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+    .danger { background: #f8e8e5; color: var(--red); }
+    .module-card .primary { width: 100%; margin-top: 12px; }
+    .info-strip { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; margin-top: 22px; padding: 15px 18px; border-left: 3px solid var(--orange); background: #e8eee7; color: #53645a; font-size: 11px; }
+    .info-strip strong { color: var(--ink); }
+    .exam-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 20px; align-items: start; }
+    .sidebar { display: grid; gap: 12px; }
+    .panel, .question-panel, .result-panel { border: 1px solid var(--line); border-radius: 9px; background: var(--surface); box-shadow: var(--shadow); }
+    .panel { padding: 15px; }
+    .panel h3 { margin-bottom: 11px; font-size: 12px; }
+    .panel select { width: 100%; min-height: 39px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); padding: 7px; font-size: 12px; }
+    .stats { display: grid; gap: 8px; color: var(--muted); font-size: 11px; }
+    .stats div { display: flex; justify-content: space-between; }
+    .stats strong { color: var(--ink); }
+    .question-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-height: 222px; overflow-y: auto; }
+    .question-grid button { position: relative; min-height: 34px; border: 1px solid var(--line); border-radius: 5px; background: #f3f5f2; color: #53645a; font-size: 11px; font-weight: 700; }
+    .question-grid button.answered { border-color: #9bc8ad; background: var(--mint); color: #205f45; }
+    .question-grid button.current { outline: 2px solid var(--green); outline-offset: 1px; }
+    .question-grid button.flagged:after { content: ''; position: absolute; width: 6px; height: 6px; top: 3px; right: 3px; border-radius: 50%; background: var(--orange); }
+    .question-panel { padding: clamp(18px, 3vw, 32px); }
+    .question-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 22px; padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+    .badges { display: flex; flex-wrap: wrap; gap: 7px; }
+    .badge { border-radius: 4px; background: var(--green-dark); color: white; padding: 5px 8px; font-size: 10px; font-weight: 700; }
+    .badge.subject { background: #e8eee7; color: #385546; }
+    .flag-button { border: 1px solid var(--line); border-radius: 6px; background: transparent; color: #617166; padding: 7px 9px; font-size: 11px; }
+    .flag-button[aria-pressed="true"] { border-color: #edc298; background: var(--orange-soft); color: #85512a; }
+    .support { margin-bottom: 18px; padding: 14px 16px; border-left: 3px solid var(--orange); background: #f7f7f1; color: #56665b; white-space: pre-line; font-size: 13px; }
+    .statement { margin: 0 0 20px; font-size: 17px; font-weight: 600; line-height: 1.55; white-space: pre-line; }
+    .options { display: grid; gap: 9px; }
+    .option { display: flex; width: 100%; align-items: start; gap: 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--ink); padding: 13px; text-align: left; font-size: 13px; }
+    .option:hover:not(:disabled) { border-color: #6b9c84; background: #f5faf6; }
+    .option.selected { border: 2px solid var(--green); background: #edf6ef; padding: 12px; }
+    .option.correct { border-color: #4a9b6d; background: #e7f4eb; }
+    .option.incorrect { border-color: #cf716b; background: #fcedeb; }
+    .option-letter { flex: 0 0 22px; color: var(--green); font-weight: 800; }
+    .feedback { margin-top: 18px; padding: 14px; border-radius: 7px; background: #edf6ef; color: #325b42; font-size: 12px; }
+    .question-controls { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 24px; padding-top: 17px; border-top: 1px solid var(--line); }
+    .question-position { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .finish-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .result-panel { padding: clamp(20px, 4vw, 40px); }
+    .result-title { margin-bottom: 4px; text-align: center; font-size: 25px; }
+    .result-copy { margin-bottom: 25px; color: var(--muted); text-align: center; font-size: 12px; }
+    .result-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .metric { padding: 14px 8px; border: 1px solid var(--line); border-radius: 7px; text-align: center; }
+    .metric span { display: block; color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .metric strong { display: block; margin-top: 3px; color: var(--green); font: 800 24px Manrope, sans-serif; }
+    .subject-results { max-width: 600px; margin: 25px auto; }
+    .subject-row { display: grid; grid-template-columns: minmax(130px, 1fr) 2fr 40px; align-items: center; gap: 12px; margin: 11px 0; color: var(--muted); font-size: 11px; }
+    .subject-row strong { color: var(--ink); text-align: right; }
+    .subject-track { height: 7px; overflow: hidden; border-radius: 5px; background: #e9eee9; }
+    .subject-track i { display: block; height: 100%; border-radius: inherit; background: var(--green); }
+    .result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; }
+    .modal-backdrop { position: fixed; z-index: 5; inset: 0; display: grid; place-items: center; padding: 18px; background: #13291fbb; }
+    .modal { width: min(100%, 420px); padding: 23px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); }
+    .modal h2 { margin-bottom: 7px; font-size: 19px; }
+    .modal p { color: var(--muted); font-size: 13px; }
+    .modal-actions { display: flex; justify-content: end; gap: 8px; margin-top: 18px; }
+    .dark { --paper: #17231d; --surface: #202f27; --ink: #e5ece6; --muted: #a1b1a5; --line: #3c5145; --green: #70c49a; --green-dark: #102b20; --mint: #294939; --orange-soft: #493626; --shadow: 0 16px 38px rgba(0,0,0,.14); color-scheme: dark; }
+    .dark .topbar { background: #10291e; }
+    .dark .hero { background: #183b2b; }
+    .dark .info-strip, .dark .support { background: #29372e; }
+    .dark .question-grid button { background: #29372e; color: var(--muted); }
+    .dark .option:hover:not(:disabled), .dark .option.selected { background: #294537; }
+    .dark .option.correct, .dark .feedback { background: #294939; }
+    .dark .option.incorrect { background: #4a302e; }
+    @media (max-width: 850px) { .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .exam-layout { grid-template-columns: 210px minmax(0, 1fr); gap: 12px; } }
+    @media (max-width: 640px) {
+      .topbar { padding: 12px 16px; } .brand-subtitle { display: none; } .quiet-button { font-size: 0; } .quiet-button:after { content: 'Limpar'; font-size: 11px; }
+      main { width: calc(100% - 28px); margin-top: 18px; } .hero { padding: 25px 21px; } .hero:after { right: -240px; }
+      .module-grid { grid-template-columns: 1fr; } .module-card { min-height: 190px; } .section-heading { align-items: start; flex-direction: column; }
+      .exam-layout { grid-template-columns: 1fr; } .sidebar { grid-template-columns: 1fr 1fr; } .sidebar > :first-child, .sidebar > :last-child { grid-column: 1 / -1; }
+      .result-metrics { grid-template-columns: repeat(2, 1fr); } .question-head { align-items: start; } .statement { font-size: 15px; }
+      .question-controls .primary, .question-controls .secondary { padding: 8px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *:before, *:after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Plantão de Estudos, início">
+      <span class="brand-mark" aria-hidden="true">✚</span>
+      <span><span class="brand-title">PLANTÃO DE ESTUDOS</span><span class="brand-subtitle" id="brand-course">Simulados para concursos</span></span>
+    </a>
+    <div class="top-actions">
+      <div id="exam-actions" class="top-actions" hidden>
+        <div class="timer" aria-live="polite"><span id="timer-display">03:00:00</span><button id="pause-button" type="button" aria-label="Pausar cronômetro">Ⅱ</button></div>
+        <button class="primary" id="finish-button" type="button">Finalizar</button>
+      </div>
+      <button class="icon-button" id="theme-button" type="button" title="Alternar tema" aria-label="Alternar tema">☾</button>
+      <button class="quiet-button" id="clear-button" type="button" title="Apagar progresso salvo">⌫ Limpar histórico</button>
+    </div>
+  </header>
+  <main>
+    <section id="home-view" class="view">
+      <div class="hero">
+        <p class="eyebrow">Preparação com foco no cuidado</p>
+        <h1>Treine com método. Chegue mais preparado.</h1>
+        <p class="hero-copy">Organize seus estudos por módulo, acompanhe o ritmo e revise cada resposta no seu tempo.</p>
+        <div class="course-tabs" role="tablist" aria-label="Programa de estudo">
+          <button class="tab" type="button" data-course="ENFERMEIRO" role="tab">Enfermeiro do Trabalho · IBAM</button>
+          <button class="tab" type="button" data-course="ACS" role="tab">Agente Comunitário · GL</button>
+        </div>
+      </div>
+      <div class="section-heading"><h2 id="course-heading">Enfermeiro do Trabalho</h2><p id="course-summary"></p></div>
+      <div class="module-grid" id="module-grid"></div>
+      <div class="info-strip"><span><strong>Nota:</strong> conteúdo demonstrativo para prática; confirme editais, legislação e referências atualizadas.</span><span>Seu progresso fica salvo neste dispositivo.</span></div>
+    </section>
+    <section id="exam-view" class="view" hidden>
+      <div class="finish-actions"><button class="secondary" id="back-button" type="button">← Menu de módulos</button><span class="question-position" id="exam-title"></span></div>
+      <div class="exam-layout">
+        <aside class="sidebar">
+          <div class="panel"><label for="subject-filter"><h3>Filtrar disciplina</h3></label><select id="subject-filter"></select></div>
+          <div class="panel"><h3>Andamento</h3><div class="stats"><div>Respondidas <strong id="stat-answered">0 / 0</strong></div><div>Para revisar <strong id="stat-flagged">0</strong></div><div>Pendentes <strong id="stat-pending">0</strong></div></div></div>
+          <div class="panel"><h3>Navegar pelas questões</h3><div class="question-grid" id="question-grid"></div></div>
+        </aside>
+        <article class="question-panel">
+          <div class="question-head"><div class="badges"><span class="badge" id="question-badge"></span><span class="badge subject" id="subject-badge"></span></div><button class="flag-button" id="flag-button" type="button" aria-pressed="false">☆ Marcar para revisar</button></div>
+          <div class="support" id="support-text" hidden></div>
+          <p class="statement" id="statement"></p>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="feedback" hidden></div>
+          <div class="question-controls"><button class="secondary" id="previous-button" type="button">← Anterior</button><span class="question-position" id="position"></span><button class="primary" id="next-button" type="button">Próxima →</button></div>
+        </article>
+      </div>
+    </section>
+    <section id="results-view" class="view" hidden><div class="result-panel"><h2 class="result-title" id="result-title">Resultado</h2><p class="result-copy">Desempenho deste módulo</p><div class="result-metrics"><div class="metric"><span>Aproveitamento</span><strong id="result-score">0%</strong></div><div class="metric"><span>Acertos</span><strong id="result-correct">0</strong></div><div class="metric"><span>Incorretas</span><strong id="result-wrong">0</strong></div><div class="metric"><span>Tempo usado</span><strong id="result-time">00:00</strong></div></div><div class="subject-results" id="subject-results"></div><div class="result-actions"><button class="primary" id="review-button" type="button">Revisar questões</button><button class="secondary" id="results-home-button" type="button">Menu principal</button><button class="secondary" id="restart-button" type="button">Refazer módulo</button></div></div></section>
+  </main>
+  <div class="modal-backdrop" id="finish-modal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><h2 id="modal-title">Finalizar simulado?</h2><p id="modal-copy"></p><div class="modal-actions"><button class="secondary" id="cancel-finish" type="button">Continuar prova</button><button class="primary" id="confirm-finish" type="button">Finalizar e ver resultado</button></div></div></div>
+  <script>
+    const courseConfig = {
+      ENFERMEIRO: { title: 'Enfermeiro do Trabalho', board: 'IBAM', count: 5, size: 25, duration: 10800, subjects: [['PORT', 'Língua Portuguesa'], ['MAT', 'Matemática / RLM'], ['INF', 'Noções de Informática'], ['ESP', 'Conhecimentos Específicos']] },
+      ACS: { title: 'Agente Comunitário de Saúde', board: 'GL Consultoria', count: 6, size: 10, duration: 10800, subjects: [['PORT', 'Língua Portuguesa'], ['MAT', 'Matemática / RLM'], ['ESP', 'Conhecimentos Específicos']] }
+    };
+    const sampleQuestions = {
+      ENFERMEIRO: [
+        ['PORT', 'Língua Portuguesa', 'Em documentos técnicos de saúde ocupacional, clareza e precisão vocabular contribuem para a segurança da comunicação.', 'Assinale a alternativa em que o uso da crase está correto.', ['O enfermeiro encaminhou o relatório à gerência.', 'A equipe prestou assistência à todas as pessoas.', 'Os laudos serão entregues à partir de segunda-feira.', 'O profissional dirigiu-se à uma reunião.'], 0, 'O verbo encaminhar, nesse contexto, rege a preposição “a”, e “gerência” admite artigo feminino: a + a = à.'],
+        ['MAT', 'Matemática / RLM', null, 'Em um grupo, 70% receberam a vacina T e 60% receberam a vacina H. Se 10% não receberam nenhuma das duas, qual percentual recebeu ambas?', ['30%', '40%', '50%', '60%'], 1, 'A união corresponde a 90%. Pela inclusão-exclusão: 70% + 60% − 90% = 40%.'],
+        ['INF', 'Noções de Informática', null, 'Em uma planilha, a fórmula =$B$2*C4 é copiada uma linha para baixo. Qual fórmula aparece na nova célula?', ['=$B$2*C5', '=$B$3*C5', '=$B$2*C4', '=B2*C5'], 0, 'A referência absoluta $B$2 permanece fixa; a referência relativa C4 avança para C5.'],
+        ['ESP', 'Conhecimentos Específicos', null, 'De acordo com a legislação do exercício profissional da Enfermagem, qual atividade é privativa do enfermeiro?', ['Realizar consulta de enfermagem.', 'Prescrever qualquer medicamento sem protocolo.', 'Delegar a supervisão do serviço a qualquer integrante.', 'Emitir CAT em nome do empregador.'], 0, 'A consulta de enfermagem é atividade privativa do enfermeiro, conforme a Lei nº 7.498/1986.'],
+        ['ESP', 'Conhecimentos Específicos', null, 'Ao identificar possível exposição ocupacional a material biológico, a conduta inicial deve priorizar:', ['A avaliação imediata do trabalhador e o fluxo institucional de atendimento.', 'Aguardar o surgimento de sintomas antes de comunicar.', 'Registrar o caso apenas se houver afastamento.', 'Manter o evento fora dos registros para preservar a equipe.'], 0, 'A avaliação oportuna, o registro e o seguimento clínico são essenciais após exposição ocupacional.']
+      ],
+      ACS: [
+        ['PORT', 'Língua Portuguesa', 'A Atenção Primária aproxima os serviços de saúde das famílias e acompanha as necessidades identificadas no território.', 'De acordo com o texto, o acompanhamento territorial permite:', ['Conhecer necessidades das famílias e orientar ações de saúde.', 'Substituir todos os profissionais da equipe.', 'Restringir o acesso ao atendimento especializado.', 'Dispensar o planejamento das ações.'], 0, 'O acompanhamento no território ajuda a identificar necessidades e organizar o cuidado.'],
+        ['MAT', 'Matemática / RLM', null, 'Uma equipe acompanha 1.200 famílias e visitou 15% delas na primeira semana. Quantas famílias foram visitadas?', ['180', '150', '240', '300'], 0, '15% de 1.200 = 0,15 × 1.200 = 180.'],
+        ['ESP', 'Conhecimentos Específicos', null, 'Sobre os princípios do SUS, a equidade significa:', ['Considerar necessidades diferentes para reduzir desigualdades no acesso.', 'Oferecer exatamente a mesma ação a todas as pessoas, em qualquer situação.', 'Restringir o atendimento aos contribuintes.', 'Priorizar exclusivamente serviços hospitalares.'], 0, 'Equidade orienta a oferta conforme as necessidades, buscando reduzir desigualdades.'],
+        ['ESP', 'Conhecimentos Específicos', null, 'Durante uma visita, o ACS identifica sinais que podem indicar agravo de notificação compulsória. O que deve fazer?', ['Comunicar a equipe de saúde para avaliação e encaminhamentos previstos.', 'Divulgar a suspeita aos vizinhos.', 'Aguardar que a família procure espontaneamente a unidade.', 'Registrar o diagnóstico como confirmado sem avaliação.'], 0, 'O ACS deve comunicar a equipe, preservar o sigilo e seguir os fluxos de vigilância.'],
+        ['ESP', 'Conhecimentos Específicos', null, 'Ao conversar com uma pessoa que relata sofrimento emocional intenso, a postura mais adequada é:', ['Acolher sem julgamento e comunicar a equipe para avaliação e apoio.', 'Minimizar o relato para evitar preocupação.', 'Prometer sigilo absoluto em qualquer circunstância.', 'Orientar a interromper tratamentos em andamento.'], 0, 'Acolhimento respeitoso e articulação com a equipe favorecem cuidado oportuno.']
+      ]
+    };
+    let courseKey = 'ENFERMEIRO', moduleId = 1, questions = [], visibleQuestions = [], currentIndex = 0;
+    let answers = {}, flagged = new Set(), finished = false, secondsLeft = 10800, timerId = null, reviewMode = false;
+    const $ = id => document.getElementById(id);
+    const storageKey = () => `plantao_${courseKey}_${moduleId}`;
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    function questionsFor(key, id) {
+      const config = courseConfig[key], base = sampleQuestions[key], output = [];
+      const counts = key === 'ENFERMEIRO' ? [5, 5, 5, 10] : [2, 2, 6];
+      let idNumber = 1;
+      config.subjects.forEach(([code], subjectIndex) => {
+        for (let index = 0; index < counts[subjectIndex]; index++) {
+          const template = base.find(item => item[0] === code && (index === 0 || item !== base.find(row => row[0] === code))) || base.find(item => item[0] === code);
+          output.push({ id: idNumber++, code, subject: template[1], support: index === 0 ? template[2] : null, statement: template[3], options: template[4], correct: template[5], explanation: template[6] });
+        }
+      });
+      return output.slice(0, config.size).map(q => ({ ...q, statement: q.statement }));
+    }
+    function saveProgress(score) {
+      const record = { answers, flagged: [...flagged], finished, secondsLeft };
+      if (score !== undefined) record.score = score;
+      localStorage.setItem(storageKey(), JSON.stringify(record));
+    }
+    function loadProgress() {
+      let record = {};
+      try { record = JSON.parse(localStorage.getItem(storageKey()) || '{}'); } catch { localStorage.removeItem(storageKey()); }
+      answers = record.answers || {}; flagged = new Set(record.flagged || []); finished = Boolean(record.finished); secondsLeft = record.secondsLeft ?? courseConfig[courseKey].duration;
+    }
+    function setView(name) {
+      for (const view of ['home', 'exam', 'results']) $(`${view}-view`).hidden = view !== name;
+      $('exam-actions').hidden = name !== 'exam'; $('clear-button').hidden = name !== 'home';
+    }
+    function initHome() {
+      document.querySelectorAll('[data-course]').forEach(button => {
+        button.setAttribute('aria-selected', String(button.dataset.course === courseKey));
+        button.onclick = () => { courseKey = button.dataset.course; renderHome(); };
+      });
+      const config = courseConfig[courseKey];
+      $('brand-course').textContent = config.title;
+      $('course-heading').textContent = config.title;
+      $('course-summary').textContent = `${config.count} módulos · ${config.size} questões por módulo`;
+      const grid = $('module-grid'); grid.replaceChildren();
+      for (let id = 1; id <= config.count; id++) {
+        let data = {};
+        try { data = JSON.parse(localStorage.getItem(`plantao_${courseKey}_${id}`) || '{}'); } catch {}
+        const count = Object.keys(data.answers || {}).length, done = Boolean(data.finished), score = data.score;
+        const card = document.createElement('article'); card.className = 'module-card';
+        const status = done ? `Concluído${score === undefined ? '' : ` · ${score}%`}` : count ? `Em andamento · ${count}/${config.size}` : 'Não iniciado';
+        card.innerHTML = `<div class="module-meta"><span class="module-number">MÓDULO ${String(id).padStart(2, '0')}</span><span class="status ${done ? 'done' : count ? 'progress' : ''}">${status}</span></div><h3>Simulado ${config.board}</h3><p>${config.size} questões · ${config.title}</p><div class="progress-track"><div class="progress-fill" style="width:${Math.min(100, count / config.size * 100)}%"></div></div><button class="primary" type="button">${done ? 'Ver resultado / refazer' : count ? 'Continuar módulo' : 'Iniciar módulo'}</button>`;
+        card.querySelector('button').onclick = () => startModule(id);
+        grid.append(card);
+      }
+    }
+    function renderHome() { initHome(); setView('home'); }
+    function startModule(id) {
+      moduleId = id; questions = questionsFor(courseKey, id); visibleQuestions = [...questions]; currentIndex = 0; reviewMode = false; loadProgress();
+      $('exam-title').textContent = `${courseConfig[courseKey].title} · Módulo ${id}`;
+      $('subject-filter').innerHTML = '<option value="ALL">Todas as disciplinas</option>' + courseConfig[courseKey].subjects.map(([code, name]) => `<option value="${code}">${escapeHTML(name)}</option>`).join('');
+      $('subject-filter').value = 'ALL';
+      if (finished) { showResults(); return; }
+      setView('exam'); renderQuestion(); startTimer();
+    }
+    function startTimer() {
+      clearInterval(timerId); updateTimer();
+      timerId = setInterval(() => { if (secondsLeft > 0) { secondsLeft--; updateTimer(); saveProgress(); } else { clearInterval(timerId); finishExam(); } }, 1000);
+    }
+    function updateTimer() {
+      const h = Math.floor(secondsLeft / 3600), m = Math.floor(secondsLeft % 3600 / 60), s = secondsLeft % 60;
+      $('timer-display').textContent = [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+    }
+    function renderQuestion() {
+      if (!visibleQuestions.length) return;
+      currentIndex = Math.max(0, Math.min(currentIndex, visibleQuestions.length - 1));
+      const q = visibleQuestions[currentIndex];
+      $('question-badge').textContent = `Questão ${q.id} de ${questions.length}`; $('subject-badge').textContent = q.subject;
+      $('support-text').hidden = !q.support; $('support-text').textContent = q.support || '';
+      $('statement').textContent = q.statement;
+      $('flag-button').setAttribute('aria-pressed', String(flagged.has(q.id))); $('flag-button').textContent = flagged.has(q.id) ? '★ Marcada para revisar' : '☆ Marcar para revisar';
+      const options = $('options'); options.replaceChildren();
+      q.options.forEach((text, index) => {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'option';
+        button.disabled = finished; button.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}.</span><span>${escapeHTML(text)}</span>`;
+        if (answers[q.id] === index) button.classList.add('selected');
+        if (finished && index === q.correct) button.classList.add('correct');
+        else if (finished && answers[q.id] === index) button.classList.add('incorrect');
+        button.onclick = () => { answers[q.id] = index; saveProgress(); renderQuestion(); };
+        options.append(button);
+      });
+      $('feedback').hidden = !finished;
+      if (finished) $('feedback').textContent = `${answers[q.id] === q.correct ? 'Resposta correta. ' : `Resposta correta: ${String.fromCharCode(65 + q.correct)}. `}${q.explanation}`;
+      $('position').textContent = `${currentIndex + 1} / ${visibleQuestions.length}`;
+      $('previous-button').disabled = currentIndex === 0; $('next-button').disabled = currentIndex === visibleQuestions.length - 1;
+      renderQuestionGrid(); updateStats();
+    }
+    function renderQuestionGrid() {
+      const grid = $('question-grid'); grid.replaceChildren();
+      visibleQuestions.forEach((q, index) => {
+        const button = document.createElement('button'); button.type = 'button'; button.textContent = q.id;
+        if (answers[q.id] !== undefined) button.classList.add('answered'); if (index === currentIndex) button.classList.add('current'); if (flagged.has(q.id)) button.classList.add('flagged');
+        button.setAttribute('aria-label', `Questão ${q.id}${flagged.has(q.id) ? ', marcada para revisar' : ''}`); button.onclick = () => { currentIndex = index; renderQuestion(); }; grid.append(button);
+      });
+    }
+    function updateStats() {
+      $('stat-answered').textContent = `${Object.keys(answers).length} / ${questions.length}`;
+      $('stat-flagged').textContent = flagged.size; $('stat-pending').textContent = Math.max(0, questions.length - Object.keys(answers).length);
+    }
+    function finishPrompt() {
+      const pending = questions.length - Object.keys(answers).length;
+      $('modal-copy').textContent = pending ? `Ainda há ${pending} questão(ões) sem resposta. Você pode finalizar mesmo assim.` : 'Todas as questões foram respondidas. Deseja ver seu resultado?';
+      $('finish-modal').hidden = false; $('confirm-finish').focus();
+    }
+    function finishExam() { $('finish-modal').hidden = true; finished = true; clearInterval(timerId); saveProgress(); showResults(); }
+    function showResults() {
+      finished = true; clearInterval(timerId); saveProgress();
+      const correct = questions.filter(q => answers[q.id] === q.correct).length, score = Math.round(correct / questions.length * 100);
+      $('result-title').textContent = `${courseConfig[courseKey].title} · Módulo ${moduleId}`;
+      $('result-score').textContent = `${score}%`; $('result-correct').textContent = `${correct}/${questions.length}`; $('result-wrong').textContent = questions.length - correct;
+      const used = courseConfig[courseKey].duration - secondsLeft;
+      $('result-time').textContent = `${String(Math.floor(used / 3600)).padStart(2, '0')}:${String(Math.floor(used % 3600 / 60)).padStart(2, '0')}`;
+      const stats = new Map(); questions.forEach(q => { if (!stats.has(q.code)) stats.set(q.code, { name: q.subject, total: 0, correct: 0 }); const s = stats.get(q.code); s.total++; if (answers[q.id] === q.correct) s.correct++; });
+      $('subject-results').innerHTML = [...stats.values()].map(s => { const percent = Math.round(s.correct / s.total * 100); return `<div class="subject-row"><span>${escapeHTML(s.name)}</span><span class="subject-track"><i style="width:${percent}%"></i></span><strong>${percent}%</strong></div>`; }).join('');
+      saveProgress(score); setView('results');
+    }
+    $('subject-filter').onchange = event => { visibleQuestions = event.target.value === 'ALL' ? [...questions] : questions.filter(q => q.code === event.target.value); currentIndex = 0; renderQuestion(); };
+    $('flag-button').onclick = () => { const q = visibleQuestions[currentIndex]; flagged.has(q.id) ? flagged.delete(q.id) : flagged.add(q.id); saveProgress(); renderQuestion(); };
+    $('previous-button').onclick = () => { currentIndex--; renderQuestion(); }; $('next-button').onclick = () => { currentIndex++; renderQuestion(); };
+    $('finish-button').onclick = finishPrompt; $('cancel-finish').onclick = () => { $('finish-modal').hidden = true; };
+    $('confirm-finish').onclick = finishExam; $('back-button').onclick = () => { clearInterval(timerId); saveProgress(); renderHome(); };
+    $('pause-button').onclick = event => { if (timerId) { clearInterval(timerId); timerId = null; event.currentTarget.textContent = '▶'; event.currentTarget.setAttribute('aria-label', 'Retomar cronômetro'); } else { startTimer(); event.currentTarget.textContent = 'Ⅱ'; event.currentTarget.setAttribute('aria-label', 'Pausar cronômetro'); } };
+    $('review-button').onclick = () => { visibleQuestions = [...questions]; currentIndex = 0; setView('exam'); renderQuestion(); };
+    $('results-home-button').onclick = renderHome;
+    $('restart-button').onclick = () => { if (confirm('Apagar as respostas deste módulo e começar de novo?')) { localStorage.removeItem(storageKey()); startModule(moduleId); } };
+    $('theme-button').onclick = () => { document.documentElement.classList.toggle('dark'); const dark = document.documentElement.classList.contains('dark'); localStorage.setItem('plantao_theme', dark ? 'dark' : 'light'); $('theme-button').textContent = dark ? '☀' : '☾'; };
+    $('clear-button').onclick = () => { if (confirm('Apagar o progresso salvo de todos os módulos neste dispositivo?')) { Object.keys(localStorage).filter(key => key.startsWith('plantao_') && key !== 'plantao_theme').forEach(key => localStorage.removeItem(key)); renderHome(); } };
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') $('finish-modal').hidden = true; });
+    if (localStorage.getItem('plantao_theme') === 'dark') { document.documentElement.classList.add('dark'); $('theme-button').textContent = '☀'; }
+    renderHome();
+  </script>
+</body>
+</html>
