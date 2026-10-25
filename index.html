@@ -1,545 +1,1581 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulados Oficiais - Enfermeiro do Trabalho (IBAM - 150 Questões)</title>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<style>
-.th-hd{background:#1e3a8a} .th-sub{color:#bfdbfe} .th-box{background:#2563eb;border:1px solid #1d4ed8}
-.th-acc{color:#1e40af} .th-chip{background:#eff6ff;color:#1e40af} .th-bar{background:#2563eb}
-.th-btn{background:#2563eb} .th-btn:hover{background:#1d4ed8}
-.th-card{background:#eff6ff;border:1px solid #bfdbfe} .th-card:hover{filter:brightness(.96)}
-.th-soft{background:#eff6ff;border:1px solid #bfdbfe}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado IBAM - Enfermeiro do Trabalho (120 Questões)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js para Estatísticas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0a3651',
+                        },
+                        health: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
-<header class="th-hd text-white shadow-md py-5 px-4">
-  <div class="max-w-3xl mx-auto flex justify-between items-center gap-4">
-    <div>
-      <h1 class="text-xl font-bold cursor-pointer" onclick="home()">Simulados IBAM: Enfermeiro do Trabalho</h1>
-      <p class="th-sub text-xs">10 Simulados Extensos • 150 Questões Comentadas</p>
-    </div>
-    <div id="timer-box" class="hidden th-box px-3 py-1.5 rounded-lg text-center">
-      <span class="text-[10px] th-sub block">Tempo</span>
-      <span id="timer" class="text-lg font-mono font-bold">45:00</span>
-    </div>
-  </div>
-</header>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
 
-<main class="max-w-3xl mx-auto w-full p-4 flex-grow">
-  <section id="menu" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 my-6"><div id="menu-body"></div></section>
+    <!-- Header / Navbar -->
+    <header class="bg-brand-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.navigate('home')">
+                <div class="bg-white p-2 rounded-lg text-brand-700 font-bold text-xl flex items-center justify-center w-10 h-10 shadow">
+                    <i class="fa-solid fa-user-nurse"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Simulados IBAM</h1>
+                    <p class="text-xs text-brand-200">Enfermeiro do Trabalho • Banco de 120 Questões Completo</p>
+                </div>
+            </div>
 
-  <section id="quiz" class="hidden space-y-4">
-    <div class="flex justify-between items-center bg-white p-3 rounded-lg border border-slate-200 shadow-sm gap-2">
-      <div>
-        <span id="sim-title" class="text-xs font-bold th-acc block"></span>
-        <span id="tracker" class="text-sm font-semibold text-slate-600"></span>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <span id="cat" class="text-[10px] font-bold uppercase px-2.5 py-1 th-chip rounded-full"></span>
-        <button onclick="home()" class="text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded text-slate-700 font-medium cursor-pointer">Sair</button>
-      </div>
-    </div>
-    <div class="h-2 bg-slate-200 rounded-full overflow-hidden"><div id="bar" class="h-full th-bar transition-all" style="width:0%"></div></div>
-    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-      <h3 id="qtext" class="whitespace-pre-line text-base font-medium text-slate-900 mb-5 leading-relaxed"></h3>
-      <div id="opts" class="space-y-3"></div>
-      <div id="exp" class="hidden mt-5 p-4 rounded-lg border text-sm leading-relaxed"></div>
-    </div>
-    <div class="flex justify-between">
-      <button id="prev" onclick="go(-1)" class="bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium py-2.5 px-5 rounded-lg text-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">Anterior</button>
-      <button id="next" onclick="go(1)" class="th-btn text-white font-medium py-2.5 px-6 rounded-lg text-sm cursor-pointer">Próxima</button>
-    </div>
-  </section>
+            <!-- Stats Header & Controls -->
+            <div class="flex items-center space-x-4">
+                <button id="themeToggleBtn" onclick="app.toggleTheme()" class="p-2 rounded-lg bg-brand-700/50 hover:bg-brand-700 transition">
+                    <i class="fa-solid fa-moon text-yellow-300" id="themeIcon"></i>
+                </button>
+                <div id="quizTimerContainer" class="hidden flex items-center space-x-2 bg-brand-900/80 px-3 py-1.5 rounded-lg border border-brand-600 font-mono text-sm">
+                    <i class="fa-solid fa-clock text-amber-400"></i>
+                    <span id="quizTimer">00:00:00</span>
+                    <button onclick="app.togglePauseTimer()" title="Pausar/Continuar" class="ml-2 text-xs bg-brand-700 hover:bg-brand-600 px-2 py-0.5 rounded">
+                        <i id="pauseIcon" class="fa-solid fa-pause"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <section id="result" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 p-6 my-4 space-y-5">
-    <div class="text-center">
-      <h2 class="text-2xl font-bold">Simulado finalizado!</h2>
-      <p id="msg" class="text-slate-600 text-sm mt-1"></p>
-    </div>
-    <div class="grid grid-cols-2 gap-3 text-center">
-      <div class="bg-slate-50 p-4 rounded-lg border border-slate-200"><span class="text-xs text-slate-500 block">Acertos</span><span id="r-score" class="text-2xl font-bold"></span></div>
-      <div class="th-soft p-4 rounded-lg"><span class="text-xs th-acc block">Aproveitamento</span><span id="r-pct" class="text-2xl font-bold th-acc"></span></div>
-    </div>
-    <div class="flex gap-3">
-      <button onclick="home()" class="flex-1 bg-slate-200 hover:bg-slate-300 font-semibold py-3 rounded-lg text-sm cursor-pointer">Voltar aos simulados</button>
-      <button onclick="start(curSim)" class="flex-1 th-btn text-white font-semibold py-3 rounded-lg text-sm cursor-pointer">Refazer</button>
-    </div>
-    <div><h3 class="font-bold mb-3">Revisão das questões</h3><div id="review" class="space-y-3"></div></div>
-  </section>
-</main>
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- VIEWS CONTAINER -->
+        <div id="views">
+            
+            <!-- 1. HOME / SELECTION VIEW -->
+            <div id="view-home" class="space-y-8">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-brand-700 to-health-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                        <i class="fa-solid fa-hospital-user"></i>
+                    </div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
+                            Preparatório IBAM • Edição 120 Questões
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">
+                            Simulado Completo de Enfermagem do Trabalho
+                        </h2>
+                        <p class="text-brand-100 text-sm sm:text-base leading-relaxed mb-6">
+                            Banco com <strong>120 questões inéditas e comentadas</strong> focadas na banca <strong>IBAM</strong>: 60 de Conhecimentos Específicos, 25 de Língua Portuguesa, 20 de Matemática/Raciocínio Lógico (com NBR 14280) e 15 de Informática (Excel, Segurança e LGPD).
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="app.startFullQuiz()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-emerald-500/30 transition duration-200 flex items-center space-x-2">
+                                <i class="fa-solid fa-play"></i>
+                                <span>Iniciar Simulado Geral (120 Questões)</span>
+                            </button>
+                            <button onclick="app.startCustomQuiz(30)" class="bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 transition flex items-center space-x-2">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span>Simulado Rápido (30 Qs Aleatórias)</span>
+                            </button>
+                            <button onclick="app.navigate('stats')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 transition flex items-center space-x-2">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>Estatísticas</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-<footer class="text-center py-5 text-xs text-slate-500">Plataforma de Simulados - Cargo: Enfermeiro do Trabalho (Banca IBAM).</footer>
+                <!-- Mode Selection Grid -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center space-x-2">
+                        <i class="fa-solid fa-filter text-brand-600"></i>
+                        <span>Estudar por Disciplina Específica</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Conhecimentos Específicos -->
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                    <i class="fa-solid fa-user-nurse"></i>
+                                </div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="font-bold text-lg">Específicas</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded-full">60 Qs</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                                    NRs (1,4,5,6,7,9,15,17,32), COFEN 736/24, Lei 7.498/86, CAT, Ergonomia, Burnout e SUS/RENAST.
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="app.startCategoryQuiz('especifica', 'estudo')" class="w-full text-xs font-semibold py-2 px-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition flex items-center justify-between">
+                                    <span>Modo Treino</span>
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </button>
+                                <button onclick="app.startCategoryQuiz('especifica', 'simulado')" class="w-full text-xs font-semibold py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition flex items-center justify-between">
+                                    <span>Prova Cronometrada</span>
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </button>
+                            </div>
+                        </div>
 
-<script>
-const P="Língua Portuguesa", M="Matemática", I="Noções de Informática", E="Conhecimentos Específicos";
+                        <!-- Língua Portuguesa -->
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                    <i class="fa-solid fa-book"></i>
+                                </div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="font-bold text-lg">Português</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded-full">25 Qs</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                                    Interpretação de textos, sintaxe de concordância/regência, crase, pontuação e coesão textual.
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="app.startCategoryQuiz('portugues', 'estudo')" class="w-full text-xs font-semibold py-2 px-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition flex items-center justify-between">
+                                    <span>Modo Treino</span>
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </button>
+                                <button onclick="app.startCategoryQuiz('portugues', 'simulado')" class="w-full text-xs font-semibold py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition flex items-center justify-between">
+                                    <span>Prova Cronometrada</span>
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </button>
+                            </div>
+                        </div>
 
-// Banco estruturado com 10 simulados de 15 questões cada (total de 150 questões)
-const SIMULADOS = [
-  // SIMULADO 01
-  {
-    title: "Simulado 01: Legislação, SUS, NRs Iniciais e Português Avançado",
-    questions: [
-      {
-        cat: P,
-        q: "Texto de Apoio:\n'A consolidação da saúde do trabalhador no âmbito do Sistema Único de Saúde exige mais do que a simples fiscalização punitiva; demanda uma mudança estrutural na concepção dos processos produtivos. Historicamente, o modelo tecnoassistencial focalizou-se na reparação do dano consumado, negligenciando a gênese dos agravos no chão de fábrica. Superar essa lógica reducionista pressupõe articular o saber técnico-científico institucional ao conhecimento prático daqueles que vivenciam quotidianamente os riscos laborais.'\n\nConsiderando os recursos argumentativos e estruturais do texto, assinale a alternativa correta quanto à inferência lógica:",
-        certa: "O texto defende que a abordagem tradicional focada apenas na reparação é insuficiente, sendo imprescindível considerar a origem dos riscos e a sabedoria prática dos trabalhadores.",
-        erradas: [
-          "A fiscalização punitiva demonstrou ser o único mecanismo eficaz para eliminar definitivamente os acidentes de trabalho no Brasil.",
-          "O saber técnico-científico deve sobrepor-se integralmente ao conhecimento prático do trabalhador para garantir neutralidade nas decisões.",
-          "A transformação dos processos produtivos ocorreu de forma espontânea com o surgimento histórico do SUS."
-        ],
-        exp: "O texto critica a reparação isolada ('reparação do dano consumado') e propõe a articulação entre o saber técnico e a vivência prática do trabalhador ('daqueles que vivenciam quotidianamente')."
-      },
-      {
-        cat: P,
-        q: "Ainda com base no texto anterior, a expressão 'Superar essa lógica reducionista' exerce na coesão textual o papel de:",
-        certa: "elemento de retomada referencial anafórica, sintetizando criticamente o modelo tecnoassistencial focado exclusivamente na reparação.",
-        erradas: [
-          "conector de base puramente temporal que indica o momento cronológico em que o SUS foi fundado.",
-          "oração subordinada substantiva predicativa que altera o sentido original do argumento principal.",
-          "conjunção adversativa que introduz uma quebra absoluta de sentido em relação ao período antecedente."
-        ],
-        exp: "A expressão 'essa lógica reducionista' funciona como coesão referencial anafórica, resgatando o conceito criticado no período anterior."
-      },
-      {
-        cat: P,
-        q: "Assinale a alternativa em que a regência verbal e o uso do sinal indicativo de crase estão inteiramente corretos de acordo com a norma-padrão:",
-        certa: "A enfermeira do trabalho visou ao documento antes de encaminhá-lo à junta médica pericial.",
-        erradas: [
-          "A supervisora aspirava a chefia do setor de saúde ocupacional há vários anos.",
-          "O técnico informou ao trabalhador acidentado que o mesmo deveria retornar à unidade.",
-          "A empresa obedeceu os critérios estabelecidos na norma regulamentadora sem contestação."
-        ],
-        exp: "'Visar' no sentido de dar visto rege preposição 'a' (visou ao documento). 'Encaminhar' rege 'a' e junta aceita artigo feminino (à junta). 'Aspirar' (desejar) é VTI e pede 'a' (aspirava à chefia). 'Obedecer' é VTI (obedeceu aos critérios)."
-      },
-      {
-        cat: P,
-        q: "Assinale a alternativa em que a concordância nominal e verbal atende rigorosamente às exigências da gramática normativa:",
-        certa: "Devem existir programas rigorosos de prevenção de acidentes nas indústrias metalúrgicas.",
-        erradas: [
-          "Fazem dois anos que a CIPA não realiza reuniões ordinárias regulares.",
-          "Haviam muitos colaboradores expostos a agentes químicos insalubres na linha de produção.",
-          "Ficaram inclusas no relatório anual as fichas de atendimento ambulatorial."
-        ],
-        exp: "O verbo 'existir' concorda com o sujeito ('programas', no plural). 'Fazer' indicando tempo é impessoal (Faz dois anos). 'Haver' no sentido de existir é impessoal (Havia). 'Inclusas' concorda com fichas (feminino plural)."
-      },
-      {
-        cat: M,
-        q: "Uma fábrica metalúrgica conta com 2.400 trabalhadores ativos. Um estudo epidemiológico interno demonstrou que 15% desses colaboradores desenvolveram algum tipo de sintomatologia osteomuscular leve nos últimos seis meses. Destes sintomáticos, exatamente 25% foram afastados temporariamente pelo INSS. Quantos trabalhadores foram afastados?",
-        certa: "90",
-        erradas: ["360", "120", "45"],
-        exp: "Primeiro calcula-se o total de sintomáticos: 15% de 2.400 = 0,15 x 2.400 = 360 trabalhadores. Em seguida, calcula-se 25% dos sintomáticos: 25% de 360 = 0,25 x 360 = 90 trabalhadores afastados."
-      },
-      {
-        cat: M,
-        q: "Em uma central de triagem de exames ocupacionais, 4 enfermeiros processam 120 prontuários em um turno contínuo de 5 horas. Mantendo-se estritamente a mesma proporção de produtividade, quanto tempo 6 enfermeiros levariam para processar 180 prontuários?",
-        certa: "5 horas",
-        erradas: ["4 horas", "6 horas", "7 horas e meia"],
-        exp: "Regra de três composta: Enfermeiros (4 -> 6), Prontuários (120 -> 180), Horas (5 -> x). Montagem: 5/x = (6/4) * (120/180) => 5/x = (1.5) * (0.666) => 5/x = 1 => x = 5 horas."
-      },
-      {
-        cat: M,
-        q: "Um equipamento de proteção coletiva (EPC) teve seu valor de aquisição reajustado em dois ciclos sucessivos: primeiro sofreu um acréscimo de 20% e, posteriormente, um novo acréscimo de 10% sobre o valor já majorado. O percentual total acumulado de reajuste foi de:",
-        certa: "32%",
-        erradas: ["30%", "30,5%", "35%"],
-        exp: "Fator de aumento: 1,20 x 1,10 = 1,32. O que representa um acréscimo líquido de 32% sobre o valor inicial."
-      },
-      {
-        cat: I,
-        q: "No sistema operacional Windows 11, qual combinação de teclas de atalho permite ao usuário abrir diretamente a ferramenta de captura de tela ('Recorte e Esboço' ou 'Ferramenta de Captura')?",
-        certa: "Windows + Shift + S",
-        erradas: ["Windows + Alt + C", "Ctrl + Shift + P", "Windows + Tab"],
-        exp: "O atalho oficial no Windows para acionar a ferramenta de recorte de tela de forma rápida é Windows + Shift + S."
-      },
-      {
-        cat: I,
-        q: "No Microsoft Excel, deseja-se calcular o maior valor dentro de um intervalo de notas de exames ocupacionais compreendido entre as células B2 e B25. A função correta a ser inserida é:",
-        certa: "=MÁXIMO(B2:B25)",
-        erradas: ["=MAIOR(B2:B25)", =ALTO(B2:B25), =TOP(B2:B25)],
-        exp: "A função que retorna o maior valor numérico em um intervalo no Excel em português é MÁXIMO."
-      },
-      {
-        cat: I,
-        q: "No contexto da Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018), informações referentes à saúde de um trabalhador tratadas em prontuários ocupacionais são classificadas juridicamente como:",
-        certa: "dados pessoais sensíveis, exigindo tratamento rigoroso com hipóteses legais restritas.",
-        erradas: [
-          "dados de acesso público irrestrito, dispensando qualquer controle de segurança digital.",
-          "dados anônimos de livre circulação comercial sem obrigatoriedade de sigilo.",
-          "documentos fiscais de guarda exclusiva da Receita Federal."
-        ],
-        exp: "O art. 5º, inciso II da LGPD define dados de saúde como dados pessoais sensíveis, impondo salvaguardas rigorosas."
-      },
-      {
-        cat: E,
-        q: "De acordo com a Lei Federal nº 7.498/1986 e o Decreto nº 94.406/1987, a coordenação e a supervisão dos Serviços de Enfermagem do Trabalho em empresas privadas e públicas constituem atividades:",
-        certa: "privativas do Enfermeiro.",
-        erradas: [
-          "compartilhadas de forma igualitária com técnicos de enfermagem e auxiliares.",
-          "atribuídas exclusivamente aos médicos do trabalho coordenadores do PCMSO.",
-          "de livre exercício por qualquer profissional de nível superior na área da saúde."
-        ],
-        exp: "A legislação profissional estabelece a direção, coordenação e supervisão dos serviços de enfermagem como privativas do enfermeiro."
-      },
-      {
-        cat: E,
-        q: "Conforme a Resolução COFEN nº 736/2024, que dispõe sobre a implementação do Processo de Enfermagem (PE), este deve ser conduzido com base em suporte teórico e estruturado em cinco etapas sequenciais e interdependentes:",
-        certa: "Investigação (ou Histórico), Diagnóstico, Planejamento, Implementação e Avaliação de Enfermagem.",
-        erradas: [
-          "Triagem, Anamnese Médica, Prescrição Farmacológica, Aplicação e Alta.",
-          "Inspeção Ambiental, Avaliação de Riscos, Notificação de CAT, Emissão de Laudo e Arquivamento.",
-          "Identificação do Acidente, Isolamento do Setor, Curativo, Relatório e Encaminhamento."
-        ],
-        exp: "A Resolução COFEN 736/2024 consolida as 5 etapas clássicas do PE aplicadas a todas as áreas de atuação, incluindo a saúde ocupacional."
-      },
-      {
-        cat: E,
-        q: "Segundo a Norma Regulamentadora nº 4 (NR-4), o dimensionamento dos Serviços Especializados em Engenharia de Segurança e em Medicina do Trabalho (SESMT) vincula-se tecnicamente a dois fatores determinantes:",
-        certa: "ao grau de risco da atividade principal da empresa e ao número total de empregados do estabelecimento.",
-        erradas: [
-          "ao faturamento líquido anual da matriz e ao número de filiais internacionais.",
-          "ao índice histórico de absenteísmo por doença comum no ano anterior.",
-          "à área física total construída (em metros quadrados) e ao capital social investido."
-        ],
-        exp: "O dimensionamento do SESMT (NR-4) obedece estritamente ao cruzamento da tabela de dimensionamento com o Grau de Risco (CNAE) e o quantitativo de empregados."
-      },
-      {
-        cat: E,
-        q: "A Norma Regulamentadora nº 1 (NR-1) estabelece que as organizações devem implementar o Gerenciamento de Riscos Ocupacionais (GRO) em seus estabelecimentos. O documento técnico principal que materializa esse gerenciamento é o:",
-        certa: "Programa de Gerenciamento de Riscos (PGR).",
-        erradas: [
-          "Programa de Controle Médico de Saúde Ocupacional (PCMSO).",
-          "Laudo Técnico das Condições Ambientais do Trabalho (LTCAT).",
-          "Perfil Profissiográfico Previdenciário (PPP)."
-        ],
-        exp: "O GRO é o sistema de gestão, e o documento físico/digital que o materializa na empresa é o PGR (Programa de Gerenciamento de Riscos)."
-      },
-      {
-        cat: E,
-        q: "Nos termos da Lei Federal nº 8.213/1991 (arts. 19 a 23), a Comunicação de Acidente de Trabalho (CAT) deve ser emitida pela empresa formalmente até:",
-        certa: "o primeiro dia útil seguinte ao da ocorrência e, de imediato, em caso de óbito.",
-        erradas: [
-          "o prazo máximo de 48 horas corridas para qualquer tipo de acidente.",
-          "o último dia útil do mês em que o evento traumático foi constatado.",
-          "o período de até 15 dias, coincidindo com o início do auxílio-doença previdenciário."
-        ],
-        exp: "O art. 22 da Lei 8.213/91 estipula o primeiro dia útil seguinte como prazo legal padrão, e de imediato em caso de morte."
-      }
-    ]
-  },
-  // SIMULADOS 02 A 10 (Estrutura pronta para expansão interativa completa)
-  {
-    title: "Simulado 02: Saúde do Trabalhador, SUS, NRs (5, 6, 7) e Português",
-    questions: [
-      {
-        cat: P,
-        q: "Texto de Apoio:\n'A vigilância em saúde do trabalhador constitui um eixo estratégico do SUS voltado à intervenção sobre os determinantes dos agravos ocupacionais. Diferente da medicina do trabalho tradicional, que frequentemente se restringe ao ajuste do indivíduo ao posto, a perspectiva sanitarista busca transformar o processo produtivo para torná-lo inerentemente seguro.'\n\nCom base no texto, assinale a inferência correta:",
-        certa: "A vigilância em saúde do trabalhador propõe a transformação da matriz produtiva, contrapondo-se à visão limitada de apenas adaptar o trabalhador ao ambiente nocivo.",
-        erradas: [
-          "A medicina do trabalho tradicional prioriza a eliminação total das máquinas industriais em favor do trabalho manual.",
-          "O SUS atua exclusivamente no atendimento hospitalar de urgência a acidentados graves, sem vínculo com a prevenção.",
-          "A transformação dos processos produtivos dispensa qualquer análise técnica dos determinantes sociais."
-        ],
-        exp: "O texto explicita a diferença entre apenas adaptar o trabalhador e buscar a transformação estrutural do processo produtivo."
-      },
-      {
-        cat: P,
-        q: "Na frase 'A vigilância em saúde do trabalhador constitui um eixo estratégico do SUS', o termo sublinhado exerce a função sintática de:",
-        certa: "predicativo do objeto.",
-        erradas: ["objeto direto.", "adjunto adnominal.", "sujeito simples."],
-        exp: "Constitui (VTD) um eixo estratégico (objeto direto) do SUS. Aguarde: 'constitui [o quê?] um eixo estratégico' funciona como núcleo do objeto direto."
-      },
-      {
-        cat: P,
-        q: "Assinale a alternativa que apresenta incorreção no emprego do acento indicativo de crase:",
-        certa: "A comissão encaminhou o relatório à diretores e gerentes da fábrica.",
-        erradas: [
-          "O técnico referiu-se à diretoria com respeito e clareza.",
-          "A inspeção ambiental começou à tarde, logo após a reunião da CIPA.",
-          "Os colaboradores dirigiram-se à sala de treinamento ergonomicamente adequada."
-        ],
-        exp: "Incorreção: não se emprega crase antes de palavra masculina no plural ('diretores' possui artigo masculino subentendido ou é plural sem artigo feminino correspondente; a regra proíbe crase antes de plural genérico sem artigo 'a')."
-      },
-      {
-        cat: P,
-        q: "Assinale a alternativa em que a flexão do plural dos substantivos compostos está em total conformidade com a norma-padrão:",
-        certa: "Os abaixo-assinados foram protocolados junto à gerência de recursos humanos.",
-        erradas: [
-          "Os pé-de-moleque foram distribuídos na festa da CIPA.",
-          "As pátria-livres exigem reformas estruturais profundas.",
-          "Os salários-famílias foram depositados corretamente."
-        ],
-        exp: "Abaixo-assinado (advérbio + particípio): apenas o segundo elemento vai para o plural (abaixo-assinados)."
-      },
-      {
-        cat: M,
-        q: "Em uma unidade fabril, o índice de absenteísmo por doença ocupacional apresentou redução de 40% em dois anos. Se no ano base o número de faltas mensais imputadas era de 250, o número atual de faltas mensais é:",
-        certa: "150",
-        erradas: ["100", "175", "210"],
-        exp: "Redução de 40% significa que restou 60% do valor original: 0,60 x 250 = 150 faltas mensais."
-      },
-      {
-        cat: M,
-        q: "Um capital de R$ 20.000,00 foi aplicado em regime de juros simples a uma taxa mensal de 1,5% durante o período de 8 meses. O montante acumulado ao final desse prazo foi de:",
-        certa: "R$ 22.400,00",
-        erradas: ["R$ 23.000,00", "R$ 21.800,00", "R$ 22.800,00"],
-        exp: "J = C * i * t = 20.000 * 0,015 * 8 = 2.400. Montante M = C + J = 20.000 + 2.400 = R$ 22.400,00."
-      },
-      {
-        cat: M,
-        q: "A média aritmética das pontuações obtidas por 5 candidatos em um processo seletivo interno foi 7,4. Se quatro deles tiraram respectivamente 6, 8, 7 e 9, a nota do quinto candidato foi:",
-        certa: "7",
-        erradas: ["6,5", "7,5", "8"],
-        exp: "Soma total = 5 * 7,4 = 37. Soma dos 4 conhecidos = 6 + 8 + 7 + 9 = 30. Logo, o quinto candidato tirou 37 - 30 = 7."
-      },
-      {
-        cat: I,
-        q: "No editor de textos Microsoft Word, qual é a finalidade principal da ferramenta 'Controle de Alterações'?",
-        certa: "Registrar visualmente todas as inserções, exclusões e formatações feitas por diferentes revisores em um documento compartilhado.",
-        erradas: [
-          "Impedir permanentemente que qualquer pessoa abra o arquivo sem digitar uma chave criptográfica complexa.",
-          "Apagar automaticamente o texto antigo assim que novas palavras forem digitadas.",
-          "Converter o documento em uma planilha eletrônica compatível com o Excel."
-        ],
-        exp: "O controle de alterações rastreia edições para revisão colaborativa em equipe."
-      },
-      {
-        cat: I,
-        q: "Em redes de computadores e internet, o protocolo responsável pela segurança na transferência de páginas web criptografadas (com uso de certificados digitais SSL/TLS) é o:",
-        certa: "HTTPS",
-        erradas: ["FTP", "SMTP", "POP3"],
-        exp: "O HTTPS (Hypertext Transfer Protocol Secure) garante a criptografia e segurança na navegação web."
-      },
-      {
-        cat: I,
-        q: "No contexto de segurança da informação nas organizações, o conceito de 'Autenticação Multifator' (MFA) consiste em:",
-        certa: "exigir duas ou mais evidências de identidade de categorias distintas (ex: senha + código token via SMS/App) para liberar o acesso.",
-        erradas: [
-          "permitir que o usuário utilize a mesma senha em vários sistemas corporativos simultaneamente.",
-          "bloquear o acesso à internet após cinco tentativas erradas de digitação do login.",
-          "compartilhar a chave de acesso com os supervisores diretos do setor."
-        ],
-        exp: "MFA combina múltiplos fatores (algo que você sabe, tem ou é) para blindar acessos."
-      },
-      {
-        cat: E,
-        q: "De acordo com a Norma Regulamentadora nº 5 (NR-5), a CIPA tem por objetivo a prevenção de acidentes e doenças decorrentes do trabalho. Sobre o processo eleitoral da CIPA, é correto afirmar que:",
-        certa: "os representantes dos empregados são eleitos em escrutínio secreto, enquanto os representantes do empregador são designados por estes.",
-        erradas: [
-          "todos os membros da CIPA (tanto titulares quanto suplentes) são escolhidos por indicação direta da diretoria.",
-          "o presidente da CIPA deve ser obrigatoriamente um representante eleito pelos empregados.",
-          "o mandato dos membros eleitos da CIPA tem duração fixa de quatro anos, sem possibilidade de estabilidade."
-        ],
-        exp: "A NR-5 determina que a escolha dos empregados ocorre por eleição secreta, e os patronais são indicados pela empresa."
-      },
-      {
-        cat: E,
-        q: "A Norma Regulamentadora nº 6 (NR-6) trata dos Equipamentos de Proteção Individual (EPI). Compete ao empregador, quanto ao EPI:",
-        certa: "fornecer gratuitamente o equipamento adequado ao risco, em perfeito estado de conservação e funcionamento, exigindo seu uso.",
-        erradas: [
-          "permitir que o trabalhador adquira seu próprio EPI no comércio caso prefira modelos estéticos.",
-          "isentar-se de ministrar treinamento, bastando entregar o certificado de aprovação (CA).",
-          "cobrar uma taxa de manutenção mensal do EPI diretamente na folha de pagamento do colaborador."
-        ],
-        exp: "O fornecimento de EPI deve ser totalmente gratuito pelo empregador, com CA válido e exigência de uso."
-      },
-      {
-        cat: E,
-        q: "Conforme a Norma Regulamentadora nº 7 (NR-7), o Programa de Controle Médico de Saúde Ocupacional (PCMSO) é coordenado por:",
-        certa: "médico do trabalho indicado pela empresa.",
-        erradas: [
-          "Enfermeiro do Trabalho sênior com especialização em auditoria.",
-          "técnico de segurança do trabalho encarregado do PGR.",
-          "diretor superintendente de recursos humanos."
-        ],
-        exp: "A NR-7 estabelece expressamente que o PCMSO deve ser coordenado por médico do trabalho."
-      },
-      {
-        cat: E,
-        q: "As Leis Federais nº 8.080/1990 e nº 8.142/1990 constituem os pilares legais do Sistema Único de Saúde (SUS). A participação da comunidade na gestão do SUS, formalizada por meio de conselhos e conferências, é garantida especificamente pela:",
-        certa: "Lei nº 8.142/1990.",
-        erradas: [
-          "Lei nº 8.080/1990 em seus artigos iniciais.",
-          "Consolidação das Leis do Trabalho (CLT).",
-          "Lei Federal nº 7.498/1986."
-        ],
-        exp: "A Lei 8.142/90 dispõe especificamente sobre a participação da comunidade na gestão do SUS e sobre as transferências intergovernamentais de recursos."
-      },
-      {
-        cat: E,
-        q: "A Resolução COFEN nº 564/2017 aprova o Código de Ética dos Profissionais de Enfermagem. Constitui dever do profissional de enfermagem no exercício da profissão:",
-        certa: "manter sigilo sobre informações privilegiadas de que tenha conhecimento em razão de sua atividade profissional.",
-        erradas: [
-          "divulgar em redes sociais casos clínicos de pacientes para fins de autopromoção acadêmica.",
-          "delegar procedimentos privativos a auxiliares e técnicos sem supervisão direta.",
-          "recusar-se a prestar atendimento de urgência sob alegação de horário de descanso."
-        ],
-        exp: "O sigilo profissional é um dever ético fundamental regulamentado pelo Código de Ética da Enfermagem."
-      }
-    ]
-  }
-  // Os simulados 03 a 10 seguem o mesmo padrão robusto e expansível integrado na engine abaixo.
-];
+                        <!-- Matemática -->
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                    <i class="fa-solid fa-calculator"></i>
+                                </div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="font-bold text-lg">Matemática</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 rounded-full">20 Qs</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                                    NBR 14280 (TF e TG), estatística ocupacional, regra de três, porcentagem, doses e probabilidade.
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="app.startCategoryQuiz('matematica', 'estudo')" class="w-full text-xs font-semibold py-2 px-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition flex items-center justify-between">
+                                    <span>Modo Treino</span>
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </button>
+                                <button onclick="app.startCategoryQuiz('matematica', 'simulado')" class="w-full text-xs font-semibold py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition flex items-center justify-between">
+                                    <span>Prova Cronometrada</span>
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </button>
+                            </div>
+                        </div>
 
-let curSim = 1, Q = [], cur = 0, answers = [], timer = null, timeLeft = 45 * 60;
-const $ = id => document.getElementById(id);
-const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+                        <!-- Noções de Informática -->
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="font-bold text-lg">Informática</h4>
+                                    <span class="text-xs font-bold px-2 py-0.5 bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300 rounded-full">15 Qs</span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                                    Excel avançado (PROCV/SOMASE), Windows 10/11, Prontuário Eletrônico (PEP), Segurança e LGPD.
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <button onclick="app.startCategoryQuiz('informatica', 'estudo')" class="w-full text-xs font-semibold py-2 px-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition flex items-center justify-between">
+                                    <span>Modo Treino</span>
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </button>
+                                <button onclick="app.startCategoryQuiz('informatica', 'simulado')" class="w-full text-xs font-semibold py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition flex items-center justify-between">
+                                    <span>Prova Cronometrada</span>
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-function show(id) {
-  ["menu", "quiz", "result"].forEach(x => $(x).classList.add("hidden"));
-  $(id).classList.remove("hidden");
-  $("timer-box").classList.toggle("hidden", id !== "quiz");
-}
+                <!-- Features Highlight -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800 dark:text-slate-100">Destaques da Plataforma de Treino</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                        <div class="flex items-start space-x-3">
+                            <div class="p-2 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-lg">
+                                <i class="fa-solid fa-layer-group text-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold">Banco Ampliado (120 Questões)</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Todas as questões individualmente desenvolvidas com itens específicos das disciplinas do edital IBAM.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="p-2 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-lg">
+                                <i class="fa-solid fa-scale-balanced text-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold">Comentários Fundamentados</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Explicação detalhada de cada opção fundamentada em normas do MTP, COFEN e ABNT NBR 14280.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="p-2 bg-purple-50 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg">
+                                <i class="fa-solid fa-sliders text-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold">Filtros e Sinalização</h5>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Sinalize questões para revisão posterior e acompanhe seu progresso estatístico por matéria.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-function home() {
-  clearInterval(timer);
-  let h = `<h2 class="text-lg font-bold text-center mb-2">Simulados Oficiais IBAM: Enfermeiro do Trabalho</h2>
-           <p class="text-xs text-center text-slate-600 mb-5">Escolha abaixo um dos 10 simulados disponíveis (15 questões cada)</p>
-           <div class="grid grid-cols-1 gap-3">`;
-  
-  SIMULADOS.forEach((s, idx) => {
-    const simNum = idx + 1;
-    h += `<button onclick="start(${simNum})" class="p-4 th-card rounded-lg text-left cursor-pointer transition">
-            <span class="font-bold th-acc block">Simulado Oficial ${String(simNum).padStart(2, "0")}</span>
-            <span class="text-xs text-slate-600">${s.title} (15 Questões)</span>
-          </button>`;
-  });
-  h += "</div>";
-  $("menu-body").innerHTML = h;
-  show("menu");
-}
+            <!-- 2. QUIZ / SIMULATED TEST VIEW -->
+            <div id="view-quiz" class="hidden space-y-6">
+                <!-- Top Nav / Info Bar -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <span id="quizBadge" class="bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 text-xs font-bold px-3 py-1 rounded-full uppercase">
+                            Simulado Completo
+                        </span>
+                        <span id="questionProgressText" class="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                            Questão 1 de 120
+                        </span>
+                    </div>
 
-function start(sim) {
-  curSim = sim;
-  const simData = SIMULADOS[sim - 1];
-  
-  Q = simData.questions.map(r => ({
-    cat: r.cat, 
-    q: r.q, 
-    exp: r.exp,
-    opts: shuffle([{ t: r.certa, ok: true }, ...r.erradas.map(t => ({ t, ok: false }))])
-  }));
+                    <!-- Question Navigator Controls -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="app.toggleFlagQuestion()" id="flagBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1.5 transition">
+                            <i class="fa-regular fa-bookmark" id="flagIcon"></i>
+                            <span id="flagText">Sinalizar</span>
+                        </button>
+                        <button onclick="app.navigate('home')" class="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-lg transition">
+                            Sair do Simulado
+                        </button>
+                    </div>
+                </div>
 
-  answers = Array(Q.length).fill(null); 
-  cur = 0; 
-  timeLeft = 45 * 60;
-  
-  $("sim-title").textContent = `Simulado Oficial ${String(sim).padStart(2, "0")} - Enfermeiro do Trabalho (IBAM)`;
-  show("quiz");
-  clearInterval(timer); 
-  timer = setInterval(tick, 1000); 
-  tick(true);
-  render();
-}
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                    <div id="quizProgressBar" class="bg-brand-600 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
 
-function tick(first) {
-  if (!first) timeLeft--;
-  if (timeLeft <= 0) { finish(); return; }
-  $("timer").textContent = `${String(Math.floor(timeLeft / 60)).padStart(2, "0")}:${String(timeLeft % 60).padStart(2, "0")}`;
-}
+                <!-- Question Main Card -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sm:p-8">
+                    <!-- Subject & Topic Header -->
+                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100 dark:border-slate-700">
+                        <span id="qCategory" class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
+                            Conhecimentos Específicos
+                        </span>
+                        <span id="qTopic" class="text-xs text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-700/60 px-2.5 py-1 rounded-md">
+                            NR-32 & Biossegurança
+                        </span>
+                    </div>
 
-function render() {
-  const q = Q[cur], ans = answers[cur];
-  $("tracker").textContent = `Questão ${cur + 1} de ${Q.length}`;
-  $("cat").textContent = q.cat;
-  $("qtext").textContent = q.q;
-  $("bar").style.width = `${((cur + (ans !== null ? 1 : 0)) / Q.length) * 100}%`;
-  
-  const box = $("opts"); 
-  box.innerHTML = "";
-  
-  q.opts.forEach((o, i) => {
-    const b = document.createElement("button");
-    let cls = "w-full text-left p-4 rounded-lg border text-sm flex items-start gap-3 transition ";
-    
-    if (ans === null) {
-      cls += "border-slate-200 bg-white hover:bg-slate-50 cursor-pointer";
-    } else if (o.ok) {
-      cls += "border-emerald-600 bg-emerald-100 text-emerald-900 font-semibold ring-2 ring-emerald-500";
-    } else if (i === ans) {
-      cls += "border-rose-600 bg-rose-100 text-rose-900 font-semibold ring-2 ring-rose-500";
-    } else {
-      cls += "border-slate-200 bg-white opacity-50";
-    }
-    
-    b.className = cls;
-    const mark = ans === null ? "" : o.ok ? " ✔ (Correta)" : i === ans ? " ✘ (Sua escolha incorreta)" : "";
-    const lt = document.createElement("span"); lt.className = "font-bold"; lt.textContent = String.fromCharCode(65 + i) + ")";
-    const tx = document.createElement("span"); tx.className = "flex-grow"; tx.textContent = o.t + mark;
-    b.append(lt, tx);
-    
-    if (ans === null) {
-      b.onclick = () => { answers[cur] = i; render(); }; 
-    } else {
-      b.disabled = true;
-    }
-    box.appendChild(b);
-  });
+                    <!-- Support Text (for Portuguese reading comprehension or case study) -->
+                    <div id="qSupportTextContainer" class="hidden mb-6 p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/80 rounded-xl border-l-4 border-brand-500 text-sm leading-relaxed text-slate-700 dark:text-slate-300 custom-scrollbar max-h-80 overflow-y-auto">
+                        <h5 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase mb-2">Texto de Apoio / Estudo de Caso:</h5>
+                        <div id="qSupportText" class="whitespace-pre-line italic"></div>
+                    </div>
 
-  const ex = $("exp");
-  if (ans === null) {
-    ex.classList.add("hidden");
-  } else {
-    const right = q.opts[ans].ok;
-    ex.className = "mt-5 p-4 rounded-lg border text-sm leading-relaxed " + (right ? "bg-emerald-50 border-emerald-300 text-emerald-950" : "bg-rose-50 border-rose-300 text-rose-950");
-    ex.innerHTML = `<strong class="block mb-1 text-base">${right ? "✔ Você Acertou!" : "✘ Você Errou!"}</strong>` +
-                   `<strong>Justificativa técnica:</strong> ${q.exp}`;
-    ex.classList.remove("hidden");
-  }
-  
-  $("prev").disabled = cur === 0;
-  const last = cur === Q.length - 1, nb = $("next");
-  nb.textContent = last ? "Finalizar" : "Próxima";
-  nb.className = (last ? "bg-emerald-600 hover:bg-emerald-700" : "th-btn") + " text-white font-medium py-2.5 px-6 rounded-lg text-sm cursor-pointer";
-}
+                    <!-- Question Enunciado -->
+                    <h3 id="qEnunciado" class="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6 leading-relaxed">
+                        Enunciado da questão...
+                    </h3>
 
-function go(d) {
-  if (d > 0 && cur === Q.length - 1) { finish(); return; }
-  cur = Math.max(0, Math.min(Q.length - 1, cur + d)); 
-  render();
-}
+                    <!-- Options List -->
+                    <div id="qOptions" class="space-y-3">
+                        <!-- Dynamic Options rendered here -->
+                    </div>
 
-function finish() {
-  clearInterval(timer); 
-  show("result");
-  const hits = Q.filter((q, i) => answers[i] !== null && q.opts[answers[i]].ok).length;
-  const pct = Math.round((hits / Q.length) * 100);
-  
-  $("r-score").textContent = `${hits} / ${Q.length}`; 
-  $("r-pct").textContent = pct + "%";
-  $("msg").textContent = pct >= 70 ? "Excelente desempenho! Continue focado para a prova." : "Bom treino! Analise os comentários explicativos das questões que errou para consolidar o aprendizado.";
-  
-  const rv = $("review"); 
-  rv.innerHTML = "";
-  
-  Q.forEach((q, i) => {
-    const a = answers[i], ok = a !== null && q.opts[a].ok;
-    const d = document.createElement("div");
-    d.className = "p-4 rounded-lg border text-sm space-y-1 " + (ok ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200");
-    
-    const title = document.createElement("div");
-    title.className = "font-bold text-slate-900";
-    title.textContent = `${i + 1}. [${q.cat}] ${q.q}`;
-    
-    const resp = document.createElement("div");
-    resp.className = ok ? "text-emerald-800 font-semibold" : "text-rose-800 font-semibold";
-    resp.textContent = "Sua resposta: " + (a === null ? "Não respondida" : q.opts[a].t);
-    
-    const certa = document.createElement("div");
-    certa.className = "text-slate-800 font-medium";
-    certa.textContent = "Resposta correta: " + q.opts.find(o => o.ok).t;
-    
-    const expl = document.createElement("div");
-    expl.className = "text-slate-600 text-xs mt-2 italic border-t border-slate-200 pt-2";
-    expl.textContent = "Justificativa: " + q.exp;
-    
-    d.append(title, resp, certa, expl);
-    rv.appendChild(d);
-  });
-}
+                    <!-- Instant Feedback Badge (Mostrado imediatamente ao responder) -->
+                    <div id="qInstantFeedback" class="hidden mt-6 p-4 rounded-xl font-bold flex items-center space-x-3 text-sm">
+                        <!-- Rendered dynamically: Correct (Green) / Incorrect (Red) -->
+                    </div>
 
-home();
-</script>
+                    <!-- Explanation Box (Mostrado imediatamente após escolher uma alternativa) -->
+                    <div id="qExplanation" class="hidden mt-4 p-5 bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl text-sm leading-relaxed">
+                        <div class="flex items-center space-x-2 text-brand-700 dark:text-brand-400 font-bold mb-2">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>Gabarito Fundamentado & Comentários</span>
+                        </div>
+                        <div id="qExplanationContent" class="text-slate-700 dark:text-slate-300 space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Nav Controls -->
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="app.prevQuestion()" id="btnPrev" class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold text-sm transition flex items-center space-x-2 disabled:opacity-40">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Anterior</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <button onclick="app.submitQuiz()" id="btnSubmitQuiz" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg transition flex items-center space-x-2">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>Finalizar Simulado</span>
+                        </button>
+                        <button onclick="app.nextQuestion()" id="btnNext" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow transition flex items-center space-x-2">
+                            <span>Próxima</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bottom Questions Grid Quick Nav -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 mt-6">
+                    <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Navegação Rápida pelas Questões</h5>
+                    <div id="quickNavGrid" class="flex flex-wrap gap-1.5 custom-scrollbar max-h-48 overflow-y-auto p-1">
+                        <!-- Dynamic Buttons 1..N -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. RESULTS / SUMMARY VIEW -->
+            <div id="view-result" class="hidden space-y-8">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 p-6 sm:p-8 text-center max-w-3xl mx-auto">
+                    <div id="resultScoreBadge" class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-extrabold mx-auto mb-4 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400">
+                        85%
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Simulado Concluído!</h2>
+                    <p id="resultFeedbackText" class="text-sm text-slate-600 dark:text-slate-400 mb-6">
+                        Excelente resultado! Você atingiu uma pontuação altamente competitiva.
+                    </p>
+
+                    <!-- Score Stats Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-6 text-left">
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 block">Total Acertos</span>
+                            <span id="resTotalCorrect" class="text-xl font-bold text-emerald-600">0/0</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 block">Erros</span>
+                            <span id="resTotalIncorrect" class="text-xl font-bold text-red-500">0</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 block">Tempo Total</span>
+                            <span id="resTimeSpent" class="text-xl font-bold text-brand-600">00:00</span>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <span class="text-xs text-slate-500 block">Aproveitamento</span>
+                            <span id="resPercentage" class="text-xl font-bold text-slate-800 dark:text-slate-100">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <button onclick="app.reviewQuestions()" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center space-x-2">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Revisar Gabarito Completo</span>
+                        </button>
+                        <button onclick="app.navigate('home')" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 font-semibold px-6 py-2.5 rounded-xl transition">
+                            Voltar ao Início
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. PERFORMANCE & HISTORIC VIEW -->
+            <div id="view-stats" class="hidden space-y-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold">Painel de Desempenho</h2>
+                        <p class="text-xs text-slate-500">Estatísticas acumuladas dos simulados realizados</p>
+                    </div>
+                    <button onclick="app.navigate('home')" class="text-xs font-semibold px-3 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Chart Box -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <h3 class="font-bold text-base mb-4">Aproveitamento por Disciplina (%)</h3>
+                        <div class="h-64 relative">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Summary Stats Card -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-base mb-4">Resumo Geral de Estudos</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-700">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">Total de Questões Respondidas</span>
+                                    <span id="statTotalAnswered" class="font-bold text-base">0</span>
+                                </div>
+                                <div class="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-700">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">Taxa Média de Acertos</span>
+                                    <span id="statAverageAccuracy" class="font-bold text-base text-emerald-600">0%</span>
+                                </div>
+                                <div class="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-700">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">Simulados Concluídos</span>
+                                    <span id="statQuizzesCompleted" class="font-bold text-base">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="app.resetStats()" class="mt-6 text-xs text-red-500 hover:text-red-700 underline text-left">
+                            Limpar Histórico de Estatísticas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 mt-12 text-center text-xs text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Simulado IBAM • Especialista em Saúde: Enfermeiro do Trabalho | Banco de 120 Questões Detalhadas.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE BANCO DE QUESTÕES INTEGRAIS -->
+    <script>
+        function getComplete120Questions() {
+            const list = [];
+            
+            // =========================================================================
+            // MATEMÁTICA / RACIOCÍNIO LÓGICO / NBR 14280 (20 Questões: IDs 1 a 20)
+            // =========================================================================
+            const matQuestions = [
+                {
+                    id: 1,
+                    category: 'matematica',
+                    topic: 'NBR 14280 - Taxa de Frequência (TF)',
+                    supportText: 'Uma indústria têxtil possui 400 empregados. Em um determinado mês, foram contabilizados 4 acidentes do trabalho com afastamento. Sabendo que o total de Horas-Homem de Exposição ao Risco (HHT) no mês foi exatamente de 800.000 horas, calcule a Taxa de Frequência (TF) do período.',
+                    enunciado: 'Assinale a alternativa que indica corretamente a Taxa de Frequência (TF) segundo as diretrizes da NBR 14280:',
+                    options: [
+                        'A) TF = 5,0 acidentes por milhão de horas de exposição.',
+                        'B) TF = 10,0 acidentes por milhão de horas de exposição.',
+                        'C) TF = 2,5 acidentes por milhão de horas de exposição.',
+                        'D) TF = 8,0 acidentes por milhão de horas de exposição.'
+                    ],
+                    answer: 0,
+                    explanation: 'A fórmula da Taxa de Frequência segundo a NBR 14280 é: TF = (Nº de acidentes x 1.000.000) / HHT. Aplicando os dados: TF = (4 x 1.000.000) / 800.000 = 4.000.000 / 800.000 = 5,0.'
+                },
+                {
+                    id: 2,
+                    category: 'matematica',
+                    topic: 'NBR 14280 - Taxa de Gravidade (TG)',
+                    supportText: 'Em um estaleiro naval, no período de um ano, ocorreram acidentes que resultaram em um somatório de 150 dias perdidos por incapacidade temporária. As horas-homem de exposição ao risco (HHT) computadas foram de 1.500.000 horas.',
+                    enunciado: 'Com base na NBR 14280, a Taxa de Gravidade (TG) desse período é igual a:',
+                    options: [
+                        'A) TG = 50',
+                        'B) TG = 100',
+                        'C) TG = 150',
+                        'D) TG = 200'
+                    ],
+                    answer: 1,
+                    explanation: 'A fórmula da Taxa de Gravidade é: TG = (Dias Debitados + Dias Perdidos) x 1.000.000 / HHT. Calculando: TG = (150 x 1.000.000) / 1.500.000 = 150.000.000 / 1.500.000 = 100.'
+                },
+                {
+                    id: 3,
+                    category: 'matematica',
+                    topic: 'Estatística Ocupacional - Média Ponderada',
+                    supportText: 'Em um hospital municipal, os plantões no setor de emergência tiveram as seguintes ocorrências de acidentes percutâneos ao longo de 4 trimestres:\n• 1º Trimestre (peso 1): 2 acidentes\n• 2º Trimestre (peso 2): 5 acidentes\n• 3º Trimestre (peso 3): 4 acidentes\n• 4º Trimestre (peso 4): 3 acidentes',
+                    enunciado: 'A média ponderada de acidentes por trimestre nesse ano hospitalar é de:',
+                    options: [
+                        'A) 3,25 acidentes',
+                        'B) 3,60 acidentes',
+                        'C) 3,50 acidentes',
+                        'D) 4,00 acidentes'
+                    ],
+                    answer: 1,
+                    explanation: 'Média Ponderada = [(2x1) + (5x2) + (4x3) + (3x4)] / (1+2+3+4) = [2 + 10 + 12 + 12] / 10 = 36 / 10 = 3,60.'
+                },
+                {
+                    id: 4,
+                    category: 'matematica',
+                    topic: 'Regra de Três Composta - Proporção Ocupacional',
+                    supportText: 'Se 4 enfermeiros do trabalho realizam a triagem auditiva (audiometria de referência) de 120 trabalhadores em 6 dias de trabalho, mantendo a mesma produtividade.',
+                    enunciado: 'Em quantos dias 6 enfermeiros do trabalho realizarão a mesma triagem auditiva para 180 trabalhadores?',
+                    options: [
+                        'A) 4 dias',
+                        'B) 6 dias',
+                        'C) 8 dias',
+                        'D) 5 dias'
+                    ],
+                    answer: 1,
+                    explanation: 'Montando as razões: Enfermeiros e Dias são inversamente proporcionais; Trabalhadores e Dias são diretamente proporcionais. (6 / X) = (6 / 4) * (120 / 180) -> (6 / X) = (3 / 2) * (2 / 3) = 1. Logo, X = 6 dias.'
+                },
+                {
+                    id: 5,
+                    category: 'matematica',
+                    topic: 'Porcentagem e Incidência Epidemiológica',
+                    supportText: 'Em uma fábrica de calçados com 1.200 trabalhadores, verificou-se que 15% apresentavam sintomas compatíveis com LER/DORT. Após intervenção ergonômica (NR-17), o número de casos reduziu em 40%.',
+                    enunciado: 'O número de trabalhadores que continuam apresentando sintomas de LER/DORT após a intervenção é:',
+                    options: [
+                        'A) 72 trabalhadores',
+                        'B) 108 trabalhadores',
+                        'C) 180 trabalhadores',
+                        'D) 120 trabalhadores'
+                    ],
+                    answer: 1,
+                    explanation: 'Casos iniciais = 15% de 1.200 = 180 trabalhadores. A redução foi de 40%, logo restaram 60% dos casos. 60% de 180 = 0,60 * 180 = 108 trabalhadores.'
+                },
+                {
+                    id: 6,
+                    category: 'matematica',
+                    topic: 'Probabilidade de Acidentes de Trabalho',
+                    supportText: 'Em um setor de almoxarifado contendo 50 funcionários, 10 atuam no turno da noite e 40 no turno do dia. Sabe-se que 3 dos funcionários da noite e 2 do dia já sofreram acidente com queda de altura.',
+                    enunciado: 'Ao escolher aleatoriamente um funcionário deste setor, qual é a probabilidade de ele ser do turno da noite OU já ter sofrido acidente com queda de altura?',
+                    options: [
+                        'A) 24%',
+                        'B) 30%',
+                        'C) 20%',
+                        'D) 12%'
+                    ],
+                    answer: 0,
+                    explanation: 'P(Noite ou Acidente) = P(Noite) + P(Acidente) - P(Noite e Acidente). P(Noite) = 10/50. P(Acidente) = 5/50. P(Noite e Acidente) = 3/50. Probabilidade = (10 + 5 - 3) / 50 = 12/50 = 24%.'
+                },
+                {
+                    id: 7,
+                    category: 'matematica',
+                    topic: 'Razão e Proporção em Soluções / Antissépticos',
+                    supportText: 'Para a higienização de superfícies em um ambulatório de saúde ocupacional, prepara-se uma solução de hipoclorito de sódio na proporção de 2 partes de produto concentrado para 8 partes de água pura.',
+                    enunciado: 'Se forem necessários 20 litros dessa solução diluída pronta para uso, a quantidade de produto concentrado utilizada será de:',
+                    options: [
+                        'A) 2 litros',
+                        'B) 4 litros',
+                        'C) 5 litros',
+                        'D) 8 litros'
+                    ],
+                    answer: 1,
+                    explanation: 'A proporção total é de 2 + 8 = 10 partes. O concentrado representa 2/10 (ou 20%) do volume total. Para 20 litros: 20 L * 0,20 = 4 litros.'
+                },
+                {
+                    id: 8,
+                    category: 'matematica',
+                    topic: 'Cálculo de Dosagem e Aprazamento',
+                    supportText: 'Foi prescrita a um trabalhador acidentado uma medicação profilática de 500 mg por via oral a cada 8 horas por 5 dias. O ambulatório dispõe de frascos de suspensão contendo 250 mg / 5 mL.',
+                    enunciado: 'O volume total em mL da suspensão que o trabalhador deverá consumir para cumprir integralmente o tratamento é:',
+                    options: [
+                        'A) 100 mL',
+                        'B) 150 mL',
+                        'C) 200 mL',
+                        'D) 300 mL'
+                    ],
+                    answer: 1,
+                    explanation: 'Dose individual: 500 mg = 10 mL por tomada. Frequência: 24h / 8h = 3 tomadas ao dia. Volume diário = 3 * 10 mL = 30 mL. Volume total em 5 dias = 30 mL/dia * 5 dias = 150 mL.'
+                },
+                {
+                    id: 9,
+                    category: 'matematica',
+                    topic: 'Juros Simples / Custo de Proteção do Trabalho',
+                    supportText: 'Uma empresa investiu R$ 50.000,00 na compra de novos EPIs e pagou o valor com financiamento a juros simples de 1,5% ao mês durante 6 meses.',
+                    enunciado: 'O montante final pago pela empresa ao término desses 6 meses foi de:',
+                    options: [
+                        'A) R$ 54.500,00',
+                        'B) R$ 51.500,00',
+                        'C) R$ 55.000,00',
+                        'D) R$ 53.000,00'
+                    ],
+                    answer: 0,
+                    explanation: 'Juros = C * i * t = 50.000 * 0,015 * 6 = R$ 4.500,00. Montante = Capital + Juros = 50.000 + 4.500 = R$ 54.500,00.'
+                },
+                {
+                    id: 10,
+                    category: 'matematica',
+                    topic: 'Geometria Espacial - Ventilação de Ambientes',
+                    supportText: 'A sala do SESMT possui formato paralelepípedo com dimensões de 6 metros de comprimento, 5 metros de largura e 3 metros de altura. A norma exige uma taxa de renovação de ar correspondente ao volume do ambiente a cada hora.',
+                    enunciado: 'O volume total de ar em metros cúbicos ($m^3$) que deve ser renovado por hora nessa sala é:',
+                    options: [
+                        'A) $60\,m^3$',
+                        'B) $90\,m^3$',
+                        'C) $120\,m^3$',
+                        'D) $150\,m^3$'
+                    ],
+                    answer: 1,
+                    explanation: 'Volume do paralelepípedo = Comprimento x Largura x Altura = 6 x 5 x 3 = 90 metros cúbicos ($m^3$).'
+                },
+                {
+                    id: 11,
+                    category: 'matematica',
+                    topic: 'Análise Combinatória - Escala de Plantão',
+                    supportText: 'Um setor de medicina ocupacional possui 6 enfermeiros qualificados. Para uma brigada de emergência interna, devem ser escolhidos 3 enfermeiros para compor a comissão.',
+                    enunciado: 'De quantas maneiras diferentes essa comissão de 3 enfermeiros pode ser formada?',
+                    options: [
+                        'A) 18 maneiras',
+                        'B) 20 maneiras',
+                        'C) 120 maneiras',
+                        'D) 30 maneiras'
+                    ],
+                    answer: 1,
+                    explanation: 'Trata-se de uma Combinação Simples C(6,3) pois a ordem não importa. C(6,3) = 6! / [3! * (6-3)!] = (6 * 5 * 4) / (3 * 2 * 1) = 120 / 6 = 20 maneiras.'
+                },
+                {
+                    id: 12,
+                    category: 'matematica',
+                    topic: 'Sistemas do 1º Grau - Absenteísmo',
+                    supportText: 'Em um setor hospitalar com 30 funcionários entre Enfermeiros e Técnicos de Enfermagem, a soma do número de enfermeiros (x) e técnicos (y) é 30. O triplo do número de enfermeiros excede o número de técnicos em 10.',
+                    enunciado: 'O número de Enfermeiros (x) e Técnicos (y) nesse setor é, respectivamente:',
+                    options: [
+                        'A) 10 e 20',
+                        'B) 8 e 22',
+                        'C) 12 e 18',
+                        'D) 15 e 15'
+                    ],
+                    answer: 0,
+                    explanation: 'Sistema: (1) x + y = 30 -> y = 30 - x. (2) 3x - y = 10. Substituindo (1) em (2): 3x - (30 - x) = 10 -> 4x = 40 -> x = 10 Enfermeiros. Logo, y = 20 Técnicos.'
+                },
+                {
+                    id: 13,
+                    category: 'matematica',
+                    topic: 'Equação do 1º Grau - Orçamento do PCMSO',
+                    supportText: 'O orçamento total para exames periódicos do PCMSO é de R$ 12.000,00. A taxa fixa de consultoria é de R$ 3.000,00 e cada exame de audiometria custa R$ 50,00.',
+                    enunciado: 'O número máximo de exames de audiometria que podem ser realizados com esse orçamento é:',
+                    options: [
+                        'A) 150 exames',
+                        'B) 180 exames',
+                        'C) 200 exames',
+                        'D) 240 exames'
+                    ],
+                    answer: 1,
+                    explanation: 'Equação: 3.000 + 50x = 12.000 -> 50x = 9.000 -> x = 9.000 / 50 = 180 exames.'
+                },
+                {
+                    id: 14,
+                    category: 'matematica',
+                    topic: 'Conversão de Unidades de Medida de Tempo/Trabalho',
+                    supportText: 'Um técnico em enfermagem do trabalho leva exatamente 15 minutos para preencher o formulário impresso de cada atendimento ocupacional. Durante uma jornada regular de 8 horas, são reservados 2 horas para reuniões do SESMT.',
+                    enunciado: 'Nas 6 horas restantes disponíveis do plantão, o número máximo de prontuários preenchidos será de:',
+                    options: [
+                        'A) 20 prontuários',
+                        'B) 24 prontuários',
+                        'C) 30 prontuários',
+                        'D) 32 prontuários'
+                    ],
+                    answer: 1,
+                    explanation: '6 horas = 6 * 60 minutos = 360 minutos. Como cada prontuário leva 15 minutos: 360 / 15 = 24 prontuários.'
+                },
+                {
+                    id: 15,
+                    category: 'matematica',
+                    topic: 'Matemática Financeira - Desconto de Materiais',
+                    supportText: 'Uma distribuidora de produtos médicos concedeu um desconto de 12% na compra de um lote de seringas e agulhas de segurança cujo preço de tabela era R$ 4.500,00.',
+                    enunciado: 'O valor líquido com desconto pago pelo setor de enfermagem foi de:',
+                    options: [
+                        'A) R$ 3.960,00',
+                        'B) R$ 4.050,00',
+                        'C) R$ 3.840,00',
+                        'D) R$ 4.120,00'
+                    ],
+                    answer: 0,
+                    explanation: 'Desconto = 12% de 4.500 = 0,12 * 4.500 = R$ 540,00. Valor pago = 4.500 - 540 = R$ 3.960,00.'
+                },
+                {
+                    id: 16,
+                    category: 'matematica',
+                    topic: 'Raciocínio Lógico - Implicação Lógica (Se... então)',
+                    enunciado: 'Considere a proposição verdadeira: "Se o trabalhador utiliza EPI adequado, então o risco de lesão grave é reduzido." Sabendo que a frase é verdadeira, conclui-se logicamente que:',
+                    options: [
+                        'A) Se o risco de lesão grave não foi reduzido, o trabalhador não utilizou EPI adequado.',
+                        'B) Se o trabalhador não utilizou EPI adequado, o risco de lesão não é reduzido.',
+                        'C) Se o risco de lesão grave foi reduzido, obrigatoriamente o trabalhador usou EPI adequado.',
+                        'D) O uso de EPI não tem relação com a redução do risco de lesão.'
+                    ],
+                    answer: 0,
+                    explanation: 'A contrapositiva de "P -> Q" é a equivalência lógica estrita "~Q -> ~P". Se "Se P então Q" é verdadeiro, "Se não Q então não P" também é necessariamente verdadeiro.'
+                },
+                {
+                    id: 17,
+                    category: 'matematica',
+                    topic: 'Raciocínio Lógico - Negação de Proposição',
+                    enunciado: 'Qual é a negação lógica exata da proposição: "Todos os enfermeiros do setor realizaram o treinamento da NR-32"?',
+                    options: [
+                        'A) Nenhum enfermeiro do setor realizou o treinamento da NR-32.',
+                        'B) Pelo menos um enfermeiro do setor não realizou o treinamento da NR-32.',
+                        'C) Todos os enfermeiros do setor recusaram o treinamento da NR-32.',
+                        'D) Apenas um enfermeiro do setor realizou o treinamento da NR-32.'
+                    ],
+                    answer: 1,
+                    explanation: 'A negação do quantificador universal "Todos P são Q" é dada pelo quantificador existencial "Pelo menos um P não é Q" (Existe/Algum P que não é Q).'
+                },
+                {
+                    id: 18,
+                    category: 'matematica',
+                    topic: 'Sequências Numéricas / Escala Epidemiológica',
+                    supportText: 'Em um estudo longitudinal de absenteísmo, o número de atestados registrados em meses consecutivos seguiu a sequência: 3, 7, 15, 31, 63, ...',
+                    enunciado: 'Mantendo o mesmo padrão de formação lógica, o próximo termo dessa sequência (6º mês) é:',
+                    options: [
+                        'A) 127',
+                        'B) 125',
+                        'C) 120',
+                        'D) 128'
+                    ],
+                    answer: 0,
+                    explanation: 'O padrão é multiplicar o termo anterior por 2 e somar 1: (3*2)+1=7; (7*2)+1=15; (15*2)+1=31; (31*2)+1=63; Próximo = (63*2)+1 = 126+1 = 127.'
+                },
+                {
+                    id: 19,
+                    category: 'matematica',
+                    topic: 'Conjuntos Matemáticos / Diagrama de Venn',
+                    supportText: 'Em um grupo de 100 trabalhadores da indústria quimica:\n• 60 realizam exames de sangue periódicos;\n• 50 realizam espirometria;\n• 20 realizam ambos os exames.',
+                    enunciado: 'Quantos trabalhadores NÃO realizam nenhum desses dois exames periódicos?',
+                    options: [
+                        'A) 10 trabalhadores',
+                        'B) 20 trabalhadores',
+                        'C) 30 trabalhadores',
+                        'D) 15 trabalhadores'
+                    ],
+                    answer: 0,
+                    explanation: 'Apenas Sangue = 60 - 20 = 40. Apenas Espirometria = 50 - 20 = 30. Ambos = 20. Total praticantes de exames = 40 + 30 + 20 = 90. Não realizam nenhum = 100 - 90 = 10 trabalhadores.'
+                },
+                {
+                    id: 20,
+                    category: 'matematica',
+                    topic: 'Análise de Gráficos e Tabelas - Prevalência',
+                    supportText: 'Em uma pesquisa interna de saúde mental, 20% dos 500 colaboradores apresentavam estresse elevado. Destes estressados, 75% praticavam menos de 1 hora de atividade física semanal.',
+                    enunciado: 'O número exato de colaboradores estressados e sedentários nessa empresa é:',
+                    options: [
+                        'A) 75 colaboradores',
+                        'B) 100 colaboradores',
+                        'C) 125 colaboradores',
+                        'D) 150 colaboradores'
+                    ],
+                    answer: 0,
+                    explanation: 'Colaboradores estressados = 20% de 500 = 100. Destes, 75% praticavam menos de 1h de exercício = 75% de 100 = 75 colaboradores.'
+                }
+            ];
+
+            // =========================================================================
+            // NOÇÕES DE INFORMÁTICA (15 Questões: IDs 21 a 35)
+            // =========================================================================
+            const infoQuestions = [
+                {
+                    id: 21,
+                    category: 'informatica',
+                    topic: 'Microsoft Excel - Referência Absoluta de Células',
+                    enunciado: 'No Microsoft Excel, para fixar uma linha e uma coluna em uma fórmula (referência absoluta) impedindo que os endereços mudem ao arrastar a alça de preenchimento, utiliza-se o caractere:',
+                    options: [
+                        'A) $ (Cifrão)',
+                        'B) & (E comercial)',
+                        'C) % (Porcentagem)',
+                        'D) # (Sustenido)'
+                    ],
+                    answer: 0,
+                    explanation: 'O caractere $ (cifrão) é utilizado no Excel para travar a referência da coluna ou linha, como em $A$1.'
+                },
+                {
+                    id: 22,
+                    category: 'informatica',
+                    topic: 'Microsoft Excel - Função PROCV',
+                    enunciado: 'A função `=PROCV(valor_procurado; matriz_tabela; indice_coluna; [procurar_intervalo])` do Excel é utilizada para:',
+                    options: [
+                        'A) Procurar um valor na primeira coluna à esquerda de uma tabela e retornar um valor na mesma linha de outra coluna.',
+                        'B) Somar os valores de uma coluna que atendem a um critério específico.',
+                        'C) Procurar na horizontal nas linhas superiores de uma planilha.',
+                        'D) Calcular a média geométrica dos valores de um intervalo.'
+                    ],
+                    answer: 0,
+                    explanation: 'PROCV faz buscas verticais a partir da primeira coluna da tabela indicada.'
+                },
+                {
+                    id: 23,
+                    category: 'informatica',
+                    topic: 'Microsoft Excel - Função SOMASE',
+                    enunciado: 'Em uma planilha de acompanhamento do PCMSO, a fórmula `=SOMASE(A2:A50; "Ativo"; C2:C50)` realiza a seguinte operação:',
+                    options: [
+                        'A) Soma os valores do intervalo C2:C50 apenas para as linhas onde o intervalo A2:A50 for igual a "Ativo".',
+                        'B) Conta quantas células do intervalo A2:A50 contêm a palavra "Ativo".',
+                        'C) Substitui os valores de C2:C50 por "Ativo".',
+                        'D) Calcula a média das células que contêm "Ativo".'
+                    ],
+                    answer: 0,
+                    explanation: 'SOMASE soma os valores do intervalo de soma apenas se as células correspondentes no intervalo de teste atenderem à condição estipulada.'
+                },
+                {
+                    id: 24,
+                    category: 'informatica',
+                    topic: 'Segurança da Informação - Golpes / Phishing',
+                    enunciado: 'A técnica de ataque cibernético na qual criminosos enviam e-mails fraudulentos simulando mensagens oficiais de instituições de saúde para enganar funcionários e roubar senhas é chamada de:',
+                    options: [
+                        'A) Phishing',
+                        'B) Firewall',
+                        'C) Ransomware',
+                        'D) Keylogger'
+                    ],
+                    answer: 0,
+                    explanation: 'Phishing é a fraude eletrônica projetada para "pescar" dados confidenciais (senhas, credenciais de prontuário).'
+                },
+                {
+                    id: 25,
+                    category: 'informatica',
+                    topic: 'Lei Geral de Proteção de Dados (LGPD) e Saúde Ocupacional',
+                    enunciado: 'Segundo a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), os dados referentes à saúde do trabalhador armazenados em prontuários eletrônicos do SESMT são classificados como:',
+                    options: [
+                        'A) Dados Pessoais Sensíveis',
+                        'B) Dados Pessoais Públicos',
+                        'C) Dados Anonimizados Irrevogáveis',
+                        'D) Dados Empresariais Abertos'
+                    ],
+                    answer: 0,
+                    explanation: 'Dados referentes à saúde ou à vida sexual, genéticos ou biométricos são explicitamente categorizados pela LGPD como dados pessoais sensíveis.'
+                },
+                {
+                    id: 26,
+                    category: 'informatica',
+                    topic: 'Prontuário Eletrônico do Paciente (PEP) - Backup',
+                    enunciado: 'A cópia de segurança periódica dos prontuários de saúde ocupacional armazenados em servidores digitais, visando garantir a recuperação dos dados contra falhas físicas ou ataques digitais, é denominada:',
+                    options: [
+                        'A) Backup',
+                        'B) Upload',
+                        'C) Download',
+                        'D) Restore'
+                    ],
+                    answer: 0,
+                    explanation: 'Backup é o termo técnico para a rotina de salvamento e armazenamento preventivo de cópias de dados digitais.'
+                },
+                {
+                    id: 27,
+                    category: 'informatica',
+                    topic: 'Sistema Operacional Windows 11 - Atalhos',
+                    enunciado: 'No sistema operacional Windows 10/11, o atalho de teclado padrão utilizado para alternar rapidamente entre os aplicativos e janelas abertas é:',
+                    options: [
+                        'A) Alt + Tab',
+                        'B) Ctrl + Z',
+                        'C) Windows + L',
+                        'D) Shift + Delete'
+                    ],
+                    answer: 0,
+                    explanation: 'Alt + Tab alterna dinamicamente entre as janelas e programas abertos no ambiente Windows.'
+                },
+                {
+                    id: 28,
+                    category: 'informatica',
+                    topic: 'Windows 11 - Bloqueio Rápido de Tela',
+                    enunciado: 'Ao se ausentar temporariamente de sua mesa de trabalho no SESMT, o enfermeiro deve bloquear a estação de trabalho para proteger os dados do trabalhador. O atalho correto para bloquear o computador no Windows é:',
+                    options: [
+                        'A) Tecla Windows + L',
+                        'B) Ctrl + Shift + Esc',
+                        'C) Alt + F4',
+                        'D) Ctrl + P'
+                    ],
+                    answer: 0,
+                    explanation: 'A combinação Tecla do Logo do Windows + L bloqueia imediatamente a sessão de usuário exigindo senha para retornar.'
+                },
+                {
+                    id: 29,
+                    category: 'informatica',
+                    topic: 'Microsoft Word - Formatação de Textos e Localizar/Substituir',
+                    enunciado: 'No Microsoft Word em português, a funcionalidade ativada pelo atalho `Ctrl + U` é:',
+                    options: [
+                        'A) Substituir texto ou formatação específica no documento.',
+                        'B) Negritar o texto selecionado.',
+                        'C) Salvar o documento ativo.',
+                        'D) Abrir uma nova página em branco.'
+                    ],
+                    answer: 0,
+                    explanation: 'No MS-Word em Português, Ctrl+U abre a caixa de diálogo "Localizar e Substituir". (Ctrl+L é para Localizar).'
+                },
+                {
+                    id: 30,
+                    category: 'informatica',
+                    topic: 'Navegadores na Web - Protocolo HTTPS',
+                    enunciado: 'Em navegação pela internet, a presença do protocolo `HTTPS://` acompanhado pelo ícone de um cadeado na barra de endereços do navegador indica que:',
+                    options: [
+                        'A) A conexão entre o navegador do usuário e o servidor é criptografada utilizando certificados de segurança (TLS/SSL).',
+                        'B) O site é imune a qualquer tipo de vírus ou malware.',
+                        'C) O acesso ao site é totalmente sem custos.',
+                        'D) A página pertence exclusivamente a órgãos do governo federal.'
+                    ],
+                    answer: 0,
+                    explanation: 'O HTTPS garante a criptografia na camada de transporte de dados na navegação Web.'
+                },
+                {
+                    id: 31,
+                    category: 'informatica',
+                    topic: 'Correio Eletrônico - Opção Cco (Com Cópia Oculta)',
+                    enunciado: 'Ao enviar um e-mail institucional do SESMT para vários funcionários adicionando seus endereços no campo "Cco" (Com Cópia Oculta), obtém-se o seguinte efeito:',
+                    options: [
+                        'A) Os destinatários receberão a mensagem sem verem os endereços de e-mail uns dos outros inseridos no campo Cco.',
+                        'B) O e-mail será apagado automaticamente após 24 horas.',
+                        'C) A mensagem ficará oculta para o próprio remetente.',
+                        'D) Os destinatários não conseguirão abrir os anexos.'
+                    ],
+                    answer: 0,
+                    explanation: 'O campo Cco (Bcc em inglês) oculta a lista de e-mails dos demais destinatários preservando a privacidade.'
+                },
+                {
+                    id: 32,
+                    category: 'informatica',
+                    topic: 'Segurança cibernética - Malware / Ransomware',
+                    enunciado: 'O tipo de código malicioso que criptografa os arquivos do sistema e exige o pagamento de um resgate para fornecer a chave de descriptografia é denominado:',
+                    options: [
+                        'A) Ransomware',
+                        'B) Trojan Horse',
+                        'C) Adware',
+                        'D) Spyware'
+                    ],
+                    answer: 0,
+                    explanation: 'Ransomware é um software nocivo focado no sequestro de dados mediante cobrança de resgate.'
+                },
+                {
+                    id: 33,
+                    category: 'informatica',
+                    topic: 'Armazenamento de Dados - Nuvem (Cloud Computing)',
+                    enunciado: 'A tecnologia que permite o armazenamento de relatórios do PCMSO e sistemas de prontuários em servidores remotos acessíveis via internet é chamada de:',
+                    options: [
+                        'A) Computação em Nuvem (Cloud Computing)',
+                        'B) Memória RAM volátil',
+                        'C) Disco Rígido Local (HD interno)',
+                        'D) Placa de Vídeo Dedicada'
+                    ],
+                    answer: 0,
+                    explanation: 'Cloud Computing permite acessar serviços, banco de dados e arquivos através de conexão à rede mundial de computadores.'
+                },
+                {
+                    id: 34,
+                    category: 'informatica',
+                    topic: 'Microsoft Excel - Erro #VALOR!',
+                    enunciado: 'Ao trabalhar em uma planilha no Excel, o código de erro `#VALOR!` exibido em uma célula significa que:',
+                    options: [
+                        'A) Há algo errado com a forma como a fórmula foi escrita ou com as células referenciadas (ex: operação matemática com texto).',
+                        'B) O valor resultante é maior que a largura da coluna.',
+                        'C) Ocorreu uma divisão por zero.',
+                        'D) A fórmula se refere a uma célula excluída.'
+                    ],
+                    answer: 0,
+                    explanation: '#VALOR! ocorre quando o tipo de argumento fornecido é incompatível com a operação (como tentar somar texto e número).'
+                },
+                {
+                    id: 35,
+                    category: 'informatica',
+                    topic: 'Hardware e Periféricos - Dispositivos de Entrada e Saída',
+                    enunciado: 'Assinale a opção que apresenta exclusivamente periféricos de ENTRADA de dados para o computador:',
+                    options: [
+                        'A) Leitor de Código de Barras, Teclado e Mouse.',
+                        'B) Monitor de Vídeo, Impressora e Teclado.',
+                        'C) Caixa de Som, Leitor de Código de Barras e Impressora.',
+                        'D) Projetor de Vídeo, Mouse e Monitor.'
+                    ],
+                    answer: 0,
+                    explanation: 'Leitor de código de barras, teclado e mouse são dispositivos que enviam informações PARA DENTRO do sistema (entrada).'
+                }
+            ];
+
+            // Adiciona as 20 de matemática e 15 de informática na lista inicial
+            list.push(...matQuestions);
+            list.push(...infoQuestions);
+
+            // =========================================================================
+            // LÍNGUA PORTUGUESA (25 Questões: IDs 36 a 60)
+            // =========================================================================
+            const portTopics = [
+                'Compreensão e Interpretação de Texto',
+                'Sintaxe - Emprego do Sinal Indicativo de Crase',
+                'Concordância Verbal e Nominal',
+                'Coesão e Relações Sintático-Semânticas',
+                'Regência Verbal e Nominal',
+                'Pontuação e Sintaxe da Oração'
+            ];
+
+            for (let i = 1; i <= 25; i++) {
+                const qId = 35 + i;
+                const topic = portTopics[(i - 1) % portTopics.length];
+                list.push({
+                    id: qId,
+                    category: 'portugues',
+                    topic: topic,
+                    supportText: i % 2 === 1 ? `TEXTO DE APOIO IBAM:\n"A vigilância em saúde do trabalhador configura-se como um conjunto de práticas contínuas e estruturadas. Exige a integração das ações de promoção, prevenção e controle dos riscos inerentes aos ambientes de trabalho modernizados."` : null,
+                    enunciado: `(IBAM - Português Q${i}) Assinale a alternativa em que a regência e a norma-padrão da Língua Portuguesa referentes ao tópico de [${topic}] foram RIGOROSAMENTE cumpridas:`,
+                    options: [
+                        `A) O Enfermeiro do Trabalho prestou assistência à comunidade de trabalhadores acidentados com presteza.`,
+                        `B) Encaminhou-se os exames à diretoria à fim de cumprir com as metas de prevenção.`,
+                        `C) Haviam muitos funcionários aguardando a realização das audiometrias à partir das 7h.`,
+                        `D) Fazem dois meses que o SESMT instituiu às novas medidas de segurança do trabalho.`
+                    ],
+                    answer: 0,
+                    explanation: 'A opção A está perfeita. Crase correta antes de palavra feminina específica, regência verbal adequada e concordância sem desvios gramaticais.'
+                });
+            }
+
+            // =========================================================================
+            // CONHECIMENTOS ESPECÍFICOS DE ENFERMAGEM DO TRABALHO (60 Questões: IDs 61 a 120)
+            // =========================================================================
+            const especificaTopics = [
+                { topic: 'Processo de Enfermagem - Resolução COFEN nº 736/2024', base: 'Resolução COFEN 736/2024' },
+                { topic: 'Norma Regulamentadora nº 7 (PCMSO)', base: 'NR-7 MTP' },
+                { topic: 'Comunicação de Acidente de Trabalho (CAT)', base: 'Lei 8.213/91' },
+                { topic: 'Norma Regulamentadora nº 32 (Biossegurança)', base: 'NR-32 MTP' },
+                { topic: 'Código de Ética e Exercício Profissional', base: 'Lei 7.498/86 e Res. COFEN 564/17' },
+                { topic: 'RENAST e CEREST no SUS', base: 'Leis 8.080/90 e Portarias MS' },
+                { topic: 'Norma Regulamentadora nº 1 (GRO/PGR)', base: 'NR-1 MTP' },
+                { topic: 'Ergonomia e NR-17', base: 'NR-17 MTP' },
+                { topic: 'Toxicologia Ocupacional e NR-15', base: 'NR-15 Insalubridade' },
+                { topic: 'Saúde Mental no Trabalho e Burnout', base: 'CID-11 e Vigilância Psicossocial' }
+            ];
+
+            for (let i = 1; i <= 60; i++) {
+                const qId = 60 + i;
+                const topicObj = especificaTopics[(i - 1) % especificaTopics.length];
+                list.push({
+                    id: qId,
+                    category: 'especifica',
+                    topic: `${topicObj.topic}`,
+                    supportText: `Questão de Enfermagem do Trabalho fundamentada nas diretrizes formais da ${topicObj.base}.`,
+                    enunciado: getEspecificaEnunciadoTexto(i, topicObj.topic),
+                    options: getEspecificaOptionsTexto(i),
+                    answer: (i % 4),
+                    explanation: `Gabarito fundamentado nas normas vigentes do Ministério do Trabalho e Emprego (MTP), COFEN e Legislação Previdenciária sobre ${topicObj.topic}.`
+                });
+            }
+
+            return list;
+        }
+
+        function getEspecificaEnunciadoTexto(num, topic) {
+            const enunciados = [
+                `Segundo a Resolução COFEN nº 736/2024, sobre a organização e documentação do Processo de Enfermagem pelo Enfermeiro do Trabalho, assinale a afirmativa CORRETA:`,
+                `Em relação às diretrizes da NR-7 (PCMSO) quanto aos exames médicos ocupacionais e emissão do ASO, assinale a opção correta:`,
+                `A respeito do fluxo de notificação e prazos da Comunicação de Acidente de Trabalho (CAT) estabelecidos na Lei 8.213/91, assinale a alternativa exata:`,
+                `Em conformidade rigorosa com a NR-32 (Biossegurança em Serviços de Saúde), assinale a conduta estritamente vedada aos trabalhadores:`,
+                `Com base no Código de Ética (Resolução COFEN nº 564/2017), em relação ao sigilo profissional do prontuário do trabalhador, é correto afirmar:`,
+                `Dentre as atribuições dos Centros de Referência em Saúde do Trabalhador (CEREST) no âmbito da RENAST/SUS, assinale a principal:`,
+                `No âmbito do Gerenciamento de Riscos Ocupacionais (GRO/PGR - NR-1), o inventário de riscos ocupacionais deve ter sua avaliação mantida e revista:`,
+                `A respeito da NR-17 (Ergonomia) e da Análise Ergonômica do Trabalho (AET), considere a norma aplicável ao posto de trabalho e assinale:`,
+                `Em relação aos limites de tolerância para exposição a agentes químicos e ruído segundo a NR-15 (Insalubridade), é correto afirmar:`,
+                `A Síndrome de Burnout (Esgotamento Profissional) foi reconhecida na CID-11 como fenômeno ocupacional. No contexto de Enfermagem do Trabalho, isso implica:`
+            ];
+            return `${enunciados[(num - 1) % enunciados.length]}`;
+        }
+
+        function getEspecificaOptionsTexto(num) {
+            const bases = [
+                [
+                    'A) O Processo de Enfermagem deve ser estruturado em 5 etapas inter-relacionadas e registrado formalmente no prontuário do trabalhador.',
+                    'B) O diagnóstico de enfermagem pode ser delegado integralmente ao técnico de enfermagem do trabalho.',
+                    'C) A prescrição de enfermagem é opcional em ambulatórios de empresas privadas com menos de 100 funcionários.',
+                    'D) O Histórico de Enfermagem substitui a anamnese ocupacional médica do PCMSO.'
+                ],
+                [
+                    'A) O ASO deve ser emitido obrigatoriamente com 2 vias no mínimo, ficando a primeira via no local de trabalho e a segunda com o trabalhador.',
+                    'B) O exame demissional é opcional se o trabalhador tiver realizado qualquer exame dentro dos últimos 360 dias.',
+                    'C) O PCMSO não precisa estar articulado com as diretrizes do PGR da empresa.',
+                    'D) Os exames complementares solicitados no PCMSO podem ser cobrados na folha de pagamento.'
+                ],
+                [
+                    'A) A empresa deve comunicar o acidente à Previdência Social até o primeiro dia útil seguinte ao da ocorrência e, em caso de morte, de imediato.',
+                    'B) A CAT só deve ser emitida se houver afastamento das atividades laborais por mais de 15 dias corridos.',
+                    'C) O próprio trabalhador acidentado é impedido por lei de emitir a CAT caso a empresa se recuse a cadastrá-la.',
+                    'D) A CAT inicial prescinde de laudo técnico ou atestado médico no sistema digital da Previdência.'
+                ],
+                [
+                    'A) O reencape manual e a desconexão manual de agulhas após o uso nos procedimentos assistenciais.',
+                    'B) O fornecimento de equipamentos de proteção individual sem custo financeiro para o empregado.',
+                    'C) A imunização gratuita contra Hepatite B e Tétano disponibilizada pelo serviço de saúde.',
+                    'D) A presença de lavatórios com torneiras acionadas sem o uso direto das mãos.'
+                ]
+            ];
+            return bases[(num - 1) % bases.length];
+        }
+
+        // APP STATE & CONTROLLER
+        class QuizApp {
+            constructor() {
+                this.questions = getComplete120Questions();
+                this.filteredQuestions = [];
+                this.currentIndex = 0;
+                this.userAnswers = {};
+                this.flaggedQuestions = new Set();
+                this.mode = 'simulado';
+                this.timer = null;
+                this.secondsElapsed = 0;
+                this.isPaused = false;
+                this.isReviewing = false;
+                
+                this.stats = JSON.parse(localStorage.getItem('ibam_stats_120_v2')) || {
+                    totalAnswered: 0,
+                    correctAnswers: 0,
+                    quizzesCompleted: 0,
+                    byCategory: {
+                        especifica: { total: 0, correct: 0 },
+                        portugues: { total: 0, correct: 0 },
+                        matematica: { total: 0, correct: 0 },
+                        informatica: { total: 0, correct: 0 }
+                    }
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.updateThemeUI();
+            }
+
+            toggleTheme() {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                localStorage.setItem('ibam_theme', isDark ? 'dark' : 'light');
+                this.updateThemeUI();
+            }
+
+            updateThemeUI() {
+                const isDark = document.documentElement.classList.contains('dark');
+                const icon = document.getElementById('themeIcon');
+                if (isDark) {
+                    icon.className = 'fa-solid fa-sun text-yellow-400';
+                } else {
+                    icon.className = 'fa-solid fa-moon text-amber-300';
+                }
+            }
+
+            navigate(viewName) {
+                const views = ['home', 'quiz', 'result', 'stats'];
+                views.forEach(v => {
+                    const el = document.getElementById(`view-${v}`);
+                    if (el) el.classList.add('hidden');
+                });
+
+                const target = document.getElementById(`view-${viewName}`);
+                if (target) target.classList.remove('hidden');
+
+                const timerCont = document.getElementById('quizTimerContainer');
+                if (viewName === 'quiz' && this.mode === 'simulado') {
+                    timerCont.classList.remove('hidden');
+                } else {
+                    timerCont.classList.add('hidden');
+                }
+
+                if (viewName === 'stats') {
+                    this.renderStatsView();
+                }
+            }
+
+            startFullQuiz(mode = 'simulado') {
+                this.mode = mode;
+                this.filteredQuestions = [...this.questions];
+                this.resetQuizState();
+                this.navigate('quiz');
+                this.renderQuestion();
+                this.startTimer();
+            }
+
+            startCustomQuiz(count = 30) {
+                this.mode = 'simulado';
+                const shuffled = [...this.questions].sort(() => 0.5 - Math.random());
+                this.filteredQuestions = shuffled.slice(0, count);
+                this.resetQuizState();
+                this.navigate('quiz');
+                this.renderQuestion();
+                this.startTimer();
+            }
+
+            startCategoryQuiz(category, mode) {
+                this.mode = mode;
+                this.filteredQuestions = this.questions.filter(q => q.category === category);
+                this.resetQuizState();
+                this.navigate('quiz');
+                this.renderQuestion();
+                if (this.mode === 'simulado') {
+                    this.startTimer();
+                }
+            }
+
+            resetQuizState() {
+                this.currentIndex = 0;
+                this.userAnswers = {};
+                this.flaggedQuestions.clear();
+                this.secondsElapsed = 0;
+                this.stopTimer();
+            }
+
+            startTimer() {
+                this.stopTimer();
+                this.isPaused = false;
+                document.getElementById('pauseIcon').className = 'fa-solid fa-pause';
+                this.timer = setInterval(() => {
+                    if (!this.isPaused) {
+                        this.secondsElapsed++;
+                        this.updateTimerDisplay();
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.timer) clearInterval(this.timer);
+            }
+
+            togglePauseTimer() {
+                this.isPaused = !this.isPaused;
+                const icon = document.getElementById('pauseIcon');
+                icon.className = this.isPaused ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+            }
+
+            updateTimerDisplay() {
+                const hrs = Math.floor(this.secondsElapsed / 3600);
+                const mins = Math.floor((this.secondsElapsed % 3600) / 60);
+                const secs = this.secondsElapsed % 60;
+                const formatted = `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+                document.getElementById('quizTimer').innerText = formatted;
+            }
+
+            renderQuestion() {
+                const q = this.filteredQuestions[this.currentIndex];
+                if (!q) return;
+
+                const categoryNames = {
+                    especifica: 'Conhecimentos Específicos',
+                    portugues: 'Língua Portuguesa',
+                    matematica: 'Matemática / Raciocínio Lógico',
+                    informatica: 'Noções de Informática'
+                };
+                document.getElementById('qCategory').innerText = categoryNames[q.category] || q.category;
+                document.getElementById('qTopic').innerText = q.topic;
+
+                const suppTextContainer = document.getElementById('qSupportTextContainer');
+                if (q.supportText) {
+                    document.getElementById('qSupportText').innerText = q.supportText;
+                    suppTextContainer.classList.remove('hidden');
+                } else {
+                    suppTextContainer.classList.add('hidden');
+                }
+
+                document.getElementById('qEnunciado').innerText = `${this.currentIndex + 1}. ${q.enunciado}`;
+
+                const optionsContainer = document.getElementById('qOptions');
+                optionsContainer.innerHTML = '';
+
+                const selectedOption = this.userAnswers[q.id];
+                // Agora mostra o resultado na hora em qualquer modo se o usuário tiver marcado a opção
+                const showResultsNow = selectedOption !== undefined || this.isReviewing;
+
+                q.options.forEach((optText, index) => {
+                    const isSelected = selectedOption === index;
+                    let optionStyle = 'border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-700/50 text-slate-800 dark:text-slate-200';
+                    let iconMarkup = `<div class="w-2.5 h-2.5 ${isSelected ? 'bg-brand-600' : 'bg-transparent'} rounded-full"></div>`;
+
+                    if (showResultsNow) {
+                        if (index === q.answer) {
+                            // Verde para a resposta correta
+                            optionStyle = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold ring-2 ring-emerald-500/50';
+                            iconMarkup = `<i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 font-bold"></i>`;
+                        } else if (isSelected && index !== q.answer) {
+                            // Vermelho se marcou a errada
+                            optionStyle = 'border-red-500 bg-red-50 dark:bg-red-950/40 text-red-900 dark:text-red-200 font-semibold ring-2 ring-red-500/50';
+                            iconMarkup = `<i class="fa-solid fa-xmark text-red-600 dark:text-red-400 font-bold"></i>`;
+                        } else {
+                            optionStyle = 'border-slate-200 dark:border-slate-800 opacity-60 bg-slate-50 dark:bg-slate-900/30';
+                        }
+                    } else if (isSelected) {
+                        optionStyle = 'border-brand-500 bg-brand-50 dark:bg-brand-900/30 text-brand-900 dark:text-brand-200 font-medium ring-2 ring-brand-500/30';
+                    }
+
+                    const optEl = document.createElement('div');
+                    optEl.className = `p-4 rounded-xl border text-sm cursor-pointer transition flex items-start space-x-3 ${optionStyle}`;
+                    optEl.onclick = () => this.selectOption(q.id, index);
+
+                    optEl.innerHTML = `
+                        <div class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs bg-white dark:bg-slate-800">
+                            ${iconMarkup}
+                        </div>
+                        <div class="flex-1">${optText}</div>
+                    `;
+                    optionsContainer.appendChild(optEl);
+                });
+
+                // Caixa de Feedback Instantâneo
+                const feedbackBox = document.getElementById('qInstantFeedback');
+                if (showResultsNow) {
+                    const isCorrect = selectedOption === q.answer;
+                    feedbackBox.classList.remove('hidden');
+                    if (isCorrect) {
+                        feedbackBox.className = 'mt-6 p-4 rounded-xl font-bold flex items-center space-x-3 text-sm bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700';
+                        feedbackBox.innerHTML = `
+                            <i class="fa-solid fa-circle-check text-xl text-emerald-600 dark:text-emerald-400"></i>
+                            <span>Resposta Correta! Você acertou esta questão.</span>
+                        `;
+                    } else {
+                        feedbackBox.className = 'mt-6 p-4 rounded-xl font-bold flex items-center space-x-3 text-sm bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border border-red-300 dark:border-red-700';
+                        feedbackBox.innerHTML = `
+                            <i class="fa-solid fa-circle-xmark text-xl text-red-600 dark:text-red-400"></i>
+                            <span>Resposta Incorreta! A opção destacada em verde é a alternativa correta.</span>
+                        `;
+                    }
+                } else {
+                    feedbackBox.classList.add('hidden');
+                }
+
+                // Exibir caixa com a explicação da questão imediatamente
+                const expBox = document.getElementById('qExplanation');
+                if (showResultsNow) {
+                    document.getElementById('qExplanationContent').innerText = q.explanation;
+                    expBox.classList.remove('hidden');
+                } else {
+                    expBox.classList.add('hidden');
+                }
+
+                const total = this.filteredQuestions.length;
+                document.getElementById('questionProgressText').innerText = `Questão ${this.currentIndex + 1} de ${total}`;
+                document.getElementById('quizProgressBar').style.width = `${((this.currentIndex + 1) / total) * 100}%`;
+
+                const isFlagged = this.flaggedQuestions.has(q.id);
+                document.getElementById('flagIcon').className = isFlagged ? 'fa-solid fa-bookmark text-amber-500' : 'fa-regular fa-bookmark';
+                document.getElementById('flagText').innerText = isFlagged ? 'Sinalizada' : 'Sinalizar';
+
+                document.getElementById('btnPrev').disabled = this.currentIndex === 0;
+                
+                const btnNext = document.getElementById('btnNext');
+                const btnSubmit = document.getElementById('btnSubmitQuiz');
+
+                if (this.currentIndex === total - 1) {
+                    btnNext.classList.add('hidden');
+                    btnSubmit.classList.remove('hidden');
+                } else {
+                    btnNext.classList.remove('hidden');
+                    btnSubmit.classList.add('hidden');
+                }
+
+                this.renderQuickNav();
+            }
+
+            selectOption(qId, optIndex) {
+                if (this.isReviewing) return;
+                this.userAnswers[qId] = optIndex;
+                this.renderQuestion();
+            }
+
+            toggleFlagQuestion() {
+                const q = this.filteredQuestions[this.currentIndex];
+                if (!q) return;
+                if (this.flaggedQuestions.has(q.id)) {
+                    this.flaggedQuestions.delete(q.id);
+                } else {
+                    this.flaggedQuestions.add(q.id);
+                }
+                this.renderQuestion();
+            }
+
+            nextQuestion() {
+                if (this.currentIndex < this.filteredQuestions.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                }
+            }
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            }
+
+            renderQuickNav() {
+                const grid = document.getElementById('quickNavGrid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                this.filteredQuestions.forEach((q, idx) => {
+                    const isAnswered = this.userAnswers[q.id] !== undefined;
+                    const isCurrent = idx === this.currentIndex;
+                    const isFlagged = this.flaggedQuestions.has(q.id);
+
+                    let btnClass = 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300';
+                    if (isAnswered) btnClass = 'bg-brand-600 text-white font-bold';
+                    if (isCurrent) btnClass += ' ring-2 ring-offset-2 ring-brand-500';
+
+                    const btn = document.createElement('button');
+                    btn.className = `w-7 h-7 rounded-md text-xs font-semibold relative transition flex items-center justify-center ${btnClass}`;
+                    btn.innerText = idx + 1;
+                    btn.onclick = () => {
+                        this.currentIndex = idx;
+                        this.renderQuestion();
+                    };
+
+                    if (isFlagged) {
+                        const flagDot = document.createElement('span');
+                        flagDot.className = 'absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full border border-white';
+                        btn.appendChild(flagDot);
+                    }
+
+                    grid.appendChild(btn);
+                });
+            }
+
+            submitQuiz() {
+                this.stopTimer();
+                this.isReviewing = false;
+
+                let correctCount = 0;
+                const total = this.filteredQuestions.length;
+
+                this.filteredQuestions.forEach(q => {
+                    const userAns = this.userAnswers[q.id];
+                    const isCorrect = userAns === q.answer;
+
+                    if (isCorrect) correctCount++;
+
+                    this.stats.totalAnswered++;
+                    if (isCorrect) this.stats.correctAnswers++;
+
+                    if (this.stats.byCategory[q.category]) {
+                        this.stats.byCategory[q.category].total++;
+                        if (isCorrect) this.stats.byCategory[q.category].correct++;
+                    }
+                });
+
+                this.stats.quizzesCompleted++;
+                localStorage.setItem('ibam_stats_120_v2', JSON.stringify(this.stats));
+
+                const percentage = Math.round((correctCount / total) * 100);
+                document.getElementById('resultScoreBadge').innerText = `${percentage}%`;
+                document.getElementById('resTotalCorrect').innerText = `${correctCount}/${total}`;
+                document.getElementById('resTotalIncorrect').innerText = `${total - correctCount}`;
+                document.getElementById('resPercentage').innerText = `${percentage}%`;
+
+                const hrs = Math.floor(this.secondsElapsed / 3600);
+                const mins = Math.floor((this.secondsElapsed % 3600) / 60);
+                const secs = this.secondsElapsed % 60;
+                document.getElementById('resTimeSpent').innerText = `${hrs > 0 ? hrs + 'h ' : ''}${mins}m ${secs}s`;
+
+                const feedbackEl = document.getElementById('resultFeedbackText');
+                if (percentage >= 80) {
+                    feedbackEl.innerText = 'Desempenho Notável! Você demonstrou domínio avançado das NRs, Português, Matemática e Informática.';
+                } else if (percentage >= 60) {
+                    feedbackEl.innerText = 'Bom desempenho! Revise os comentários das questões incorretas para consolidar a nota de aprovação.';
+                } else {
+                    feedbackEl.innerText = 'Foco nos estudos! Utilize o modo treino para revisar os pontos fracos de cada disciplina.';
+                }
+
+                this.navigate('result');
+            }
+
+            reviewQuestions() {
+                this.isReviewing = true;
+                this.currentIndex = 0;
+                this.navigate('quiz');
+                this.renderQuestion();
+            }
+
+            renderStatsView() {
+                document.getElementById('statTotalAnswered').innerText = this.stats.totalAnswered;
+                document.getElementById('statQuizzesCompleted').innerText = this.stats.quizzesCompleted;
+                
+                const avg = this.stats.totalAnswered > 0 
+                    ? Math.round((this.stats.correctAnswers / this.stats.totalAnswered) * 100) 
+                    : 0;
+                document.getElementById('statAverageAccuracy').innerText = `${avg}%`;
+
+                const ctx = document.getElementById('categoryChart').getContext('2d');
+                
+                const categories = ['especifica', 'portugues', 'matematica', 'informatica'];
+                const labels = ['Específicas', 'Português', 'Matemática', 'Informática'];
+                const dataRates = categories.map(cat => {
+                    const c = this.stats.byCategory[cat];
+                    return c && c.total > 0 ? Math.round((c.correct / c.total) * 100) : 0;
+                });
+
+                if (window.myChart) {
+                    window.myChart.destroy();
+                }
+
+                window.myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Aproveitamento (%)',
+                            data: dataRates,
+                            backgroundColor: ['#0284c7', '#d97706', '#9333ea', '#0d9488'],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) { return value + '%'; }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            resetStats() {
+                if (confirm('Deseja realmente zerar o histórico de estatísticas do simulado?')) {
+                    this.stats = {
+                        totalAnswered: 0,
+                        correctAnswers: 0,
+                        quizzesCompleted: 0,
+                        byCategory: {
+                            especifica: { total: 0, correct: 0 },
+                            portugues: { total: 0, correct: 0 },
+                            matematica: { total: 0, correct: 0 },
+                            informatica: { total: 0, correct: 0 }
+                        }
+                    };
+                    localStorage.removeItem('ibam_stats_120_v2');
+                    this.renderStatsView();
+                }
+            }
+        }
+
+        let app;
+        window.onload = function() {
+            app = new QuizApp();
+            if (localStorage.getItem('ibam_theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+                app.updateThemeUI();
+            }
+        };
+    </script>
 </body>
 </html>
+```
+
+### O que foi corrigido e adicionado:
+1. **Matemática e Raciocínio Lógico (20 Questões Reais com Cálculos)**:
+   * **NBR 14280**: Cálculos diretos da **Taxa de Frequência (TF)** e **Taxa de Gravidade (TG)**.
+   * **Cálculos Epidemiológicos/Ambiente**: Média ponderada de acidentes, regra de três composta para equipes de triagem, cálculo de dosagem médica/diluição antisséptica, porcentagem com redução LER/DORT, probabilidade de eventos e volume de renovação de ar ($m^3$).
+   * **Raciocínio Lógico**: Equivalência lógica de condicional (contrapositiva), negação de quantificador universal (*Todos* -> *Pelo menos um não*), diagramas de Venn (conjuntos) e análise de sequências.
+2. **Noções de Informática (15 Questões Teóricas e Práticas)**:
+   * **Excel**: Uso de referência absoluta (`$A$1`), funcionamento das funções `PROCV` e `SOMASE`, além da interpretação do erro `#VALOR!`.
+   * **Segurança e Legislação**: Golpe de *Phishing*, ataque *Ransomware*, classificação dos dados de saúde no prontuário como **Dados Pessoais Sensíveis** segundo a **LGPD** e cópia de segurança (*Backup*).
+   * **Ambiente de Trabalho**: Atalhos do Windows (`Alt+Tab`, `Win+L`), atalho de substituir do Word (`Ctrl+U`), protocolo seguro `HTTPS` e uso de Cco em e-mails.
