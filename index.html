@@ -128,7 +128,7 @@
                             </button>
                             <button onclick="app.startCustomQuiz(30)" class="bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 transition flex items-center space-x-2 text-sm sm:text-base">
                                 <i class="fa-solid fa-bolt text-yellow-300"></i>
-                                <span>Simulado Rápido (30 Qs)</span>
+                                <span>Simulado Rápido (até 30 Qs)</span>
                             </button>
                             <button onclick="app.navigate('stats')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 transition flex items-center space-x-2 text-sm sm:text-base">
                                 <i class="fa-solid fa-chart-line"></i>
@@ -413,6 +413,7 @@
         </div>
     </div>
 
+    <script src="questions.js"></script>
     <!-- APP ENGINE JS -->
     <script>
         // QUESTION DATABASE STRUCTURE
@@ -421,7 +422,7 @@
             ibam_enfermeiro: {
                 id: 'ibam_enfermeiro',
                 title: 'IBAM - Enfermeiro do Trabalho',
-                description: 'Banca IBAM • 120 Questões no total (Específicas 60, Português 25, Matemática/NBR14280 20, Informática 15)',
+                description: 'Banca IBAM • Questões disponíveis organizadas por disciplina.',
                 categories: {
                     especifica: { name: 'Conhecimentos Específicos', icon: 'fa-user-nurse', color: 'blue', desc: 'NRs 1,4,5,6,7,9,15,17,32, COFEN 736/24, Lei 7.498/86 e Saúde Ocupacional' },
                     portugues: { name: 'Língua Portuguesa', icon: 'fa-book', color: 'amber', desc: 'Interpretação, Concordância, Regência, Crase, Pontuação e Coesão' },
@@ -434,7 +435,7 @@
             transpetro_adm: {
                 id: 'transpetro_adm',
                 title: 'Transpetro - Profissional Transpetro (Ênfase 1: Administração)',
-                description: 'Banca Cesgranrio • 70 Questões (Português 10, Inglês 10, Conhecimentos Específicos de Administração 50)',
+                description: 'Banca Cesgranrio • Questões disponíveis organizadas por disciplina.',
                 categories: {
                     portugues: { name: 'Língua Portuguesa', icon: 'fa-book', color: 'amber', desc: 'Sintaxe, Coesão, Modalização e Compreensão Textual estilo Cesgranrio' },
                     ingles: { name: 'Língua Inglesa', icon: 'fa-language', color: 'indigo', desc: 'Interpretação de textos técnicos, vocabulário corporativo e conectivos' },
@@ -444,159 +445,7 @@
             }
         };
 
-        // POPULATE QUESTION BANK (120 for IBAM, 70 for Transpetro)
-        (function generateQuestions() {
-            // --- 1. IBAM QUESTIONS ---
-            const ibamQs = [];
-            
-            // Específicas (60 Qs)
-            const especTopics = [
-                { topic: 'NR-32 & Biossegurança', text: 'Segundo a NR-32 (Segurança e Saúde no Trabalho em Serviços de Saúde), em relação ao descarte de perfurocortantes, assinale a alternativa CORRETA:', options: ['O reencape de agulhas é permitido se feito com luvas de procedimento.', 'Os recipientes para perfurocortantes devem ser preenchidos até 5 cm acima do limite máximo.', 'É vedado o reencape e a desconexão manual de agulhas de seringas.', 'O descarte de perfurocortantes pode ser feito em sacos plásticos brancos leitosos comuns.'], correct: 2, exp: 'Conforme a NR-32 (item 32.2.4.15), é expressamente vedado o reencape e a desconexão manual de agulhas. Os recipientes de perfurocortantes devem ser mantidos em suporte exclusivo e respeitar o limite máximo de enchimento.' },
-                { topic: 'Resolução COFEN 736/2024', text: 'A Resolução COFEN nº 736/2024 regulamenta a implementação do Processo de Enfermagem (PE). Sobre a Consulta de Enfermagem do Trabalho, é correto afirmar:', options: ['É atribuição privativa do Enfermeiro e compreende etapas dinâmicas e inter-relacionadas.', 'Pode ser delegada ao Técnico de Enfermagem sob supervisão remota.', 'Dispensa o registro em prontuário caso o trabalhador não apresente queixas.', 'A etapa de diagnóstico de enfermagem é opcional em exames ocupacionais.'], correct: 0, exp: 'A Resolução COFEN 736/2024 reitera que o Processo de Enfermagem é atividade privativa do Enfermeiro no contexto da Consulta de Enfermagem, constituída por Diagnóstico, Planejamento, Implementação e Avaliação.' },
-                { topic: 'Lei 7.498/86 & Exercício Profissional', text: 'De acordo com a Lei nº 7.498/86, integra a equipe de enfermagem do trabalho. Constitui atividade privativa do Enfermeiro do Trabalho:', options: ['A aplicação de vacinas de rotina na empresa.', 'O planejamento, organização, coordenação e avaliação dos serviços de enfermagem ocupacional.', 'A curatela e preenchimento de fichas de EPI.', 'O transporte de emergência de acidentados sem suporte avançado.'], correct: 1, exp: 'Art. 11 da Lei 7.498/86 define como privativo do Enfermeiro a direção, planejamento, organização, coordenação, execução e avaliação dos serviços de Enfermagem.' },
-                { topic: 'NR-07 (PCMSO)', text: 'Com base nas atualizações da NR-07 (Programa de Controle Médico de Saúde Ocupacional), a emissão do ASO (Atestado de Saúde Ocupacional) exige:', options: ['Apenas a assinatura do trabalhador.', 'Duas vias, sendo a primeira via arquivada na empresa e a segunda entregue ao trabalhador.', 'Apenas registro digital sem necessidade de via impressa ao empregado.', 'Aprovação prévia do sindicato da categoria.'], correct: 1, exp: 'Conforme NR-07, o ASO deve ser emitido em duas vias: a primeira via fica arquivada no local de trabalho e a segunda é obrigatoriamente entregue ao trabalhador mediante recibo.' },
-                { topic: 'NR-01 & GRO/PGR', text: 'O Gerenciamento de Riscos Ocupacionais (GRO) previsto na NR-01 exige que a organização elabore o PGR. O inventário de riscos deve contemplar:', options: ['Apenas riscos físicos e químicos.', 'Identificação dos perigos, avaliação de riscos e medidas de prevenção associadas.', 'Apenas acidentes fatais ocorridos nos últimos 10 anos.', 'Dados exclusivamente financeiros de insalubridade.'], correct: 1, exp: 'O PGR compreende a identificação de perigos, a avaliação das exposições e dos riscos ocupacionais, com a devida gradação e plano de ação correspondente.' },
-                { topic: 'CAT & Acidentes de Trabalho', text: 'A Comunicação de Acidente de Trabalho (CAT) deve ser emitida pela empresa até qual prazo em caso de acidente não fatal?', options: ['Primeiro dia útil seguinte ao da ocorrência.', 'Até 48 horas após a perícia do INSS.', 'No prazo de 30 dias corridos.', 'Apenas ao final do mês vigente.'], correct: 0, exp: 'Nos termos do art. 22 da Lei 8.213/91, a empresa deve comunicar o acidente de trabalho à Previdência Social até o primeiro dia útil seguinte ao da ocorrência e, de imediato, à autoridade competente em caso de morte.' }
-            ];
-
-            for (let i = 1; i <= 60; i++) {
-                const base = especTopics[(i - 1) % especTopics.length];
-                ibamQs.push({
-                    id: `ibam_e_${i}`,
-                    category: 'especifica',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (${base.topic}) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            // Português (25 Qs)
-            const portTopics = [
-                { topic: 'Crase & Regência', text: 'Assinale a alternativa em que o uso do sinal indicativo de crase está CORRETO conforme a norma-padrão:', options: ['O enfermeiro dirigiu-se à sala de exames com rapidez.', 'A equipe prestou atendimento à partir das 8 horas.', 'A médica referiu-se à todas as funcionárias envolvidas.', 'Ele começou à relatar os sintomas de fadiga.'], correct: 0, exp: 'Ocorre crase antes do substantivo feminino "sala" regido pelo verbo "dirigir-se a". Antes de verbo (partir, relatar) e pronomes indefinidos/plurais (todas), não ocorre crase.' },
-                { topic: 'Concordância Verbal', text: 'Indique a frase que cumpre rigorosamente as regras de concordância verbal:', options: ['Fazia três anos que o PCMSO não era revisado.', 'Houveram muitos acidentes de trabalho no setor no mês passado.', 'Tratam-se de exames admissionais prioritários.', 'Mais de um funcionário faltaram ao treinamento.'], correct: 0, exp: 'O verbo "fazer" indicando tempo decorrido é impessoal (permanece no singular). "Haver" no sentido de existir também é impessoal ("Houve acidentes").' },
-                { topic: 'Sintaxe & Pontuação', text: 'Assinale a opção com pontuação CORRETA:', options: ['O enfermeiro, examinou o paciente com atenção.', 'Após a palestra sobre ergonomia, os trabalhadores retornaram ao setor.', 'Os relatórios de insalubridade foram aprovados mas, precisam de ajustes.', 'A vacinação, foi concluída com êxito.'], correct: 1, exp: 'A oração subordinada adverbial anteposta ("Após a palestra...") é devidamente isolada por vírgula. Não se separa sujeito do verbo com vírgula.' }
-            ];
-
-            for (let i = 1; i <= 25; i++) {
-                const base = portTopics[(i - 1) % portTopics.length];
-                ibamQs.push({
-                    id: `ibam_p_${i}`,
-                    category: 'portugues',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (${base.topic}) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            // Matemática & NBR 14280 (20 Qs)
-            const matTopics = [
-                { topic: 'NBR 14280 - Taxa de Frequência (TF)', text: 'Uma empresa registrou 4 acidentes com afastamento no mês de Maio, acumulando 500.000 horas-homem trabalhadas no período. Qual a Taxa de Frequência (TF)?', options: ['TF = 8,0', 'TF = 12,5', 'TF = 5,0', 'TF = 20,0'], correct: 0, exp: 'Fórmula da NBR 14280: TF = (Nº de acidentes x 1.000.000) / Horas-homem trabalhadas. TF = (4 x 1.000.000) / 500.000 = 4.000.000 / 500.000 = 8,0.' },
-                { topic: 'NBR 14280 - Taxa de Gravidade (TG)', text: 'Em uma fábrica com 200.000 horas trabalhadas, ocorreram acidentes com perda de 100 dias debitados e transportados. Qual a Taxa de Gravidade (TG)?', options: ['TG = 500', 'TG = 250', 'TG = 100', 'TG = 1.000'], correct: 0, exp: 'Fórmula NBR 14280: TG = (Dias perdidos + debitados x 1.000.000) / Horas-homem trabalhadas. TG = (100 x 1.000.000) / 200.000 = 500.' },
-                { topic: 'Porcentagem & Estatística Ocupacional', text: 'Em uma empresa de 1.200 colaboradores, 15% apresentaram atestado médico no mês. Quantos colaboradores apresentaram atestado?', options: ['180 colaboradores', '120 colaboradores', '150 colaboradores', '240 colaboradores'], correct: 0, exp: 'Cálculo: 15% de 1.200 = 0,15 x 1.200 = 180 colaboradores.' }
-            ];
-
-            for (let i = 1; i <= 20; i++) {
-                const base = matTopics[(i - 1) % matTopics.length];
-                ibamQs.push({
-                    id: `ibam_m_${i}`,
-                    category: 'matematica',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (${base.topic}) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            // Informática (15 Qs)
-            const infTopics = [
-                { topic: 'Excel Avançado - PROCV', text: 'No Microsoft Excel em português, a função PROCV possui como sintaxe básica:', options: ['=PROCV(valor_procurado; matriz_tabela; número_índice_coluna; [procurar_intervalo])', '=PROCV(matriz; valor; coluna)', '=PROCV(soma; intervalo; condicao)', '=PROCV(coluna; linha; referencia)'], correct: 0, exp: 'A função PROCV exige o valor procurado, a matriz tabela de busca, o número do índice da coluna a retornar e a correspondência exata/aproximada (0 ou 1).' },
-                { topic: 'LGPD & Prontuários', text: 'A Lei Geral de Proteção de Dados (LGPD - Lei 13.709/18) classifica os dados de saúde dos trabalhadores como:', options: ['Dados públicos irrestritos.', 'Dados pessoais sensíveis.', 'Dados estatísticos anonimizados sem proteção.', 'Dados meramente comerciais.'], correct: 1, exp: 'O Art. 5º, II da LGPD estabelece expressamente que dados referentes à saúde ou à vida sexual, dado genético ou biométrico são DADOS PESSOAIS SENSÍVEIS.' },
-                { topic: 'Segurança da Informação', text: 'O ataque cibernético do tipo Phishing caracteriza-se por:', options: ['Infectar a BIOS do computador.', 'Tentar enganar o usuário mediante mensagens falsas convincentes para roubar credenciais/dados.', 'Criptografar arquivos e exigir resgate em criptomoeda.', 'Destruir fisicamente o disco rígido.'], correct: 1, exp: 'Phishing é uma técnica de engenharia social voltada a enganar o usuário para a obtenção ilegítima de dados confidenciais.' }
-            ];
-
-            for (let i = 1; i <= 15; i++) {
-                const base = infTopics[(i - 1) % infTopics.length];
-                ibamQs.push({
-                    id: `ibam_i_${i}`,
-                    category: 'informatica',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (${base.topic}) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            DATABASE.ibam_enfermeiro.questions = ibamQs;
-
-            // --- 2. TRANSPETRO QUESTIONS ---
-            const transQs = [];
-
-            // Português (10 Qs)
-            const tpPort = [
-                { topic: 'Coesão & Modalização (Cesgranrio)', text: 'No trecho: "Embora os investimentos em logística tenham aumentado, os gargalos operacionais persistiram", o conector "Embora" introduz uma ideia de:', options: ['Concessão', 'Causa', 'Consequência', 'Condição', 'Finalidade'], correct: 0, exp: 'O elemento coesivo "Embora" é uma conjunção subordinativa concessiva (indica um fato contrário que não impede a ação principal).' },
-                { topic: 'Sintaxe da Oração', text: 'Assinale a opção em que a regência do verbo atende à norma-padrão culta:', options: ['O administrador aspirava a um cargo executivo na Transpetro.', 'O relatório implica em sanções imediatas.', 'O gestor preferia mais a eficiência do que o lucro imediato.', 'A equipe simpatizou-se com o novo plano.'], correct: 0, exp: 'O verbo aspirar no sentido de desejar/almejar exige preposição "a" (aspirar a algo). O verbo implicar no sentido de acarretar é transitivo direto (sem "em").' }
-            ];
-
-            for (let i = 1; i <= 10; i++) {
-                const base = tpPort[(i - 1) % tpPort.length];
-                transQs.push({
-                    id: `tp_p_${i}`,
-                    category: 'portugues',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (Cesgranrio) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            // Inglês (10 Qs)
-            const tpIngles = [
-                { topic: 'Text Comprehension & Vocabulary', text: 'In the sentence: "The offshore pipeline maintenance was postponed due to severe weather conditions", the phrase "due to" is synonymous with:', options: ['because of', 'despite', 'in order to', 'instead of', 'as long as'], correct: 0, exp: '"Due to" means "because of" (devido a/em razão de), expressing a cause.' },
-                { topic: 'Corporate Vocabulary', text: 'The term "supply chain management" refers to:', options: ['The management of the flow of goods and services from origin to consumption.', 'The human resources hiring process.', 'Financial audit reports.', 'Legal defense in labor courts.', 'Tax calculation methods.'], correct: 0, exp: 'Supply Chain Management (Gestão da Cadeia de Suprimentos) engloba todo o fluxo produtivo de bens e serviços.' }
-            ];
-
-            for (let i = 1; i <= 10; i++) {
-                const base = tpIngles[(i - 1) % tpIngles.length];
-                transQs.push({
-                    id: `tp_ing_${i}`,
-                    category: 'ingles',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (English Comprehension) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            // Específica Administração (50 Qs)
-            const tpAdm = [
-                { topic: 'Licitações & Lei 14.133/2021', text: 'Nos termos da Nova Lei de Licitações (Lei nº 14.133/2021), a modalidade licitatória obrigatória para aquisição de bens e serviços comuns é o:', options: ['Pregão', 'Concorrência', 'Diálogo Competitivo', 'Leilão', 'Tomada de Preços'], correct: 0, exp: 'A Lei 14.133/21 estabelece o Pregão como modalidade obrigatória para aquisição de bens e serviços comuns, cujo critério de julgamento seja menor preço ou maior desconto.' },
-                { topic: 'Gestão de Materiais & Curva ABC', text: 'Na administração de estoques pela Curva ABC, os itens da Classe A correspondem a:', options: ['Poucos itens em quantidade, mas que representam o maior valor monetário acumulado do estoque.', 'Muitos itens em quantidade e alto valor financeiro.', 'Itens de menor valor econômico e baixa prioridade de controle.', 'Produtos obsoletos descartados do estoque ativo.', 'Insumos sem controle patrimonial.'], correct: 0, exp: 'Princípio de Pareto na Curva ABC: Classe A possui reduzida quantidade física (aprox. 15-20% dos itens), mas responde pela maior fatia financeira (aprox. 70-80% do valor do estoque).' },
-                { topic: 'Gestão Estratégica & Matriz SWOT', text: 'Na análise SWOT (FOFA), fatores ambientais externos incontroláveis que podem prejudicar o desempenho da organização são classificados como:', options: ['Ameaças', 'Oportunidades', 'Fraquezas', 'Forças', 'Pontos Fortes'], correct: 0, exp: 'Ambiente externo = Oportunidades e Ameaças. Fatores externos desfavoráveis = Ameaças.' }
-            ];
-
-            for (let i = 1; i <= 50; i++) {
-                const base = tpAdm[(i - 1) % tpAdm.length];
-                transQs.push({
-                    id: `tp_adm_${i}`,
-                    category: 'especifica',
-                    topic: base.topic,
-                    enunciado: `[Questão ${i}] (${base.topic}) - ${base.text}`,
-                    options: base.options,
-                    correct: base.correct,
-                    explanation: base.exp
-                });
-            }
-
-            DATABASE.transpetro_adm.questions = transQs;
-        })();
+        populateQuestions(DATABASE);
 
         // APP CONTROLLER STATE
         const app = {
@@ -692,7 +541,7 @@
                 const shuffled = [...exam.questions].sort(() => 0.5 - Math.random());
                 this.activeQuestions = shuffled.slice(0, count);
                 this.currentMode = 'simulado';
-                this.launchQuiz(`Simulado Rápido (${count} Qs)`);
+                this.launchQuiz(`Simulado Rápido (${this.activeQuestions.length} Qs)`);
             },
 
             startCategoryQuiz(catKey, mode = 'simulado') {
